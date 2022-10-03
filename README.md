@@ -12,6 +12,9 @@
 - [Cloud computing](https://en.wikipedia.org/wiki/Cloud_computing)
 - [Big data](https://en.wikipedia.org/wiki/Big_data)
 
+## Software version control
+- [Git](/git-summary.md)
+
 ## Software development methodologies
 - [Waterfall](https://en.wikipedia.org/wiki/Waterfall_model)
 - [Agile](https://en.wikipedia.org/wiki/Agile_software_development)
