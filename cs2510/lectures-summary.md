@@ -563,6 +563,15 @@ class Runner {
 }
 ```
 
+For today, we are simply going to look at various groups of runners. We’d like to find out:
+- all the runners who are male
+- all the runners who are female
+- all the runners who start in the pack of the first 50 runners
+- all runners who finish the race in under four hours
+- all runners younger than age 40
+
+Later we’ll ask more complicated questions, too.
+
 13.1 Warmup: answering the first few questions
 
 Add functions to interface and classes.
@@ -608,3 +617,28 @@ Fix this again by delegation:
 // In Runner
 public boolean isMaleRunner() { return this.isMale; }
 ```
+
+And now we can rewrite our methods to use this helper instead.
+
+```java
+// In ConsLoRunner
+public ILoRunner findAllMaleRunners() {
+  if (this.first.isMaleRunner()) {
+    return new ConsLoRunner(this.first, this.rest.findAllMaleRunners());
+  }
+  else {
+    return this.rest.findAllMaleRunners();
+  }
+}
+public ILoRunner findAllFemaleRunners() {
+  if (!this.first.isMaleRunner()) {
+    return new ConsLoRunner(this.first, this.rest.findAllFemaleRunners());
+  }
+  else {
+    return this.rest.findAllFemaleRunners();
+  }
+}
+```
+
+13.2 Abstracting over behavior: Function objects
+
