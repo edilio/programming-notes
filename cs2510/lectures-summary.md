@@ -786,3 +786,90 @@ To use it:
 ```java
 IRunnerPredicate pre = new AndPredicate(new RunnerIsMale(), new FinishIn4Hours())
 ```
+
+It should be pretty easy create an or predicate:
+
+```java
+// Represents a predicate that is true whenever one of its component predicates is true
+class AndPredicate implements IRunnerPredicate {
+  IRunnerPredicate left, right;
+  AndPredicate(IRunnerPredicate left, IRunnerPredicate right) {
+    this.left = left;
+    this.right = right;
+  }
+  public boolean apply(Runner r) {
+    return this.left.apply(r) || this.right.apply(r);
+  }
+}
+```
+
+Lecture 14: Abstractions over more than one argument
+
+14.1 Finding the final standings
+
+Similar to Predicates, use Function objects to compare tow objects so they can be used in sorting algorithm.
+
+```java
+interface ICompareRunners {
+  // Returns true if r1 comes before r2 according to this ordering
+  boolean comesBefore(Runner r1, Runner r2);
+}
+```
+
+```java
+ class CompareByTime implements ICompareRunners {
+  public boolean comesBefore(Runner r1, Runner r2) {
+    return r1.time < r2.time;
+  }
+}
+```
+
+This wy seems very simple to sort by different attributes like age, position, etc.
+
+Refactoring `ILoRunner`, `MtLoRunner` and `ConsLoRunner` to use the interface.
+
+```java
+interface ILoRunner {
+  ILoRunner sortBy(ICompareRuners comp);
+  ILoRunner insertBy(ICompareRunners comp, Runner r);
+}
+```
+
+```java
+// in MtLoRunner
+public ILoRunner sortBy(ICompareRunners comp) { return this; }
+
+public ILoRunner insertBy(ICompareRunners comp, Runner r) {
+  return new ConsLoRunner(r, this);
+}
+```
+
+```java
+// in ConsLoRunner
+public ILoRunner sortBy(ICompareRunners comp) {
+  return this.rest.sortBy(comp).insertBy(comp, this.first);
+}
+
+public ILoRunner insertBy(ICompareRunners comp, Runner r) {
+  if (comp.comesBefore(this.first, r)) {
+    return new ConsLoRunner(this.first, this.rest.insertBy(comp, r));
+  }
+  else {
+    return new ConsLoRunner(r, this);
+  }
+}
+```
+
+// in Runner
+
+// No more method finishesBefore!
+
+Now, instead of saying 
+```java
+marathon.sortByTime()
+```
+, we would instead write
+
+```java
+marathon.sortBy(new CompareByTime())
+```
