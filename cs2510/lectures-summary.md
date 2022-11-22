@@ -989,3 +989,246 @@ class CompareByName implements IRunnerComparator {
 ```
 
 So, `marathon.sortBy(new CompareByName())` will do it.
+
+Lecture 15: Abstracting over types(Generics)
+
+15.1 The need for more abstraction
+
+Because we need predicates and comparator for books, and runners, etc we need another abstraction. Generics(abstraction over types)
+
+15.2 Introducing generics
+
+The only differences between an IRunnerPredicate and an IBookPredicate are their `names`, and the `type` of the argument supplied to the apply methods:
+
+```java
+interface IBookPredicate {
+  boolean apply(Book b);
+}
+
+interface IRunnerPredicate {
+  boolean apply(Runner r);
+}
+```
+
+Here is using generics:
+
+```java
+interface IPred<T> {
+  boolean apply(T t);
+}
+```
+
+Typical Java convention is to use T to be the name of an arbitrary type, and if additional type parameters are needed, they are often named U, V, or S (simply because those letters are near T in the alphabet).
+
+We read this declaration in words as “the interface IPred of T”. The syntax <T> states that this interface is parameterized by a type, which we will name T within the definition of this interface.
+
+15.3 Implementing generic interfaces: specialization
+
+```java
+class BookByAuthor implements IPred<Book> {
+  public boolean apply(Book b) { ... }
+  ...
+}
+```
+
+15.4 Instantiating generic interfaces
+
+Before it was:
+
+```java
+IBookPredicate byAuthor = new BookByAuthor(...);
+```
+
+Now:
+
+```java
+IPred<Book> byAuthor = new BookByAuthor(...);
+```
+
+So, all the refactoring should be easy to do.
+
+15.5 Generic classes: implementing lists
+
+The common features of all of these interfaces are pretty clear: they all represent lists of something. So we’ll define a generic interface IList<T> as follows:
+
+```java
+interface IList<T> {
+  IList<T> filter(IPred<T> pred);
+  IList<T> sort(IComparator<T> comp);
+  int length();
+  ...
+}
+```
+
+How can we implement the classes? If we just write
+
+```java
+java
+class MtList<T> implements IList<T> {
+  public IList<T> filter(IPred<T> pred) { return this; }
+  public IList<T> sort(IComparator<T> comp) { return this; }
+  public int length() { return 0; }
+  ...
+}
+```
+
+And:
+
+```java
+class ConsList<T> implements IList<T> {
+  T first;
+  IList<T> rest;
+  ConsList(T first, IList<T> rest) {
+    this.first = first;
+    this.rest = rest;
+  }
+  ...
+}
+```
+
+Defining methods such as filter for ConsList<T> is straightforward, as long as we remember to specify the type of the new ConsList being constructed:
+
+```java
+// In ConsList<T>
+public IList<T> filter(IPred<T> pred) {
+  if (pred.apply(this.first)) {
+    return new ConsList<T>(this.first, this.rest.filter(pred));
+  }
+  else {
+    return this.rest.filter(pred);
+  }
+}
+```
+
+It is pretty easy to refactor sort now to use the generics form too.
+
+15.6 Generic interfaces with more than one parameter
+
+Suppose we wanted to produce the list of all Runners’ names. Without generics, we might come up with an interface definition like this:
+
+```java
+interface IRunner2String {
+  String apply(Runner r);
+}
+```
+
+Obviously this only works for results being of type string. If we want the list of ages, authors in a bookstore?
+
+Instead of creating one by one all the combinations, let’s define the following interface, that’s generic in two type parameters:
+
+```java
+interface IFunc<A, R> {
+  R apply(A arg);
+}
+```
+
+This interface describes function objects that take an argument of type A and return a value of type R. In Fundies I notation, this describes functions with the signature A -> R. Now we can define a class that implements this interface:
+
+```java
+class RunnerName implements IFunc<Runner, String> {
+  public String apply(Runner r) { return r.name; }
+}
+```
+
+As you can see, all this is for creating a way to do a map function in lists, let's try it.
+
+```java
+// In IList<T>:
+<U> IList<U> map(IFunc<T, U> f);
+```
+
+The function will return `U`, the list will be of type `U` but because `U` is not being defined yet, we need to add `<U>` before the method.
+
+```java
+// In MtList<T>
+public <U> IList<U> map(IFunc<T, U> f) { return new MtList<U>(); }
+```
+
+and in ConsList:
+
+```java
+// In ConsList<T>
+public <U> IList<U> map(IFunc<T, U> f) {
+  return new ConsList<U>(f.apply(this.first), this.rest.map(f));
+}
+```
+
+So far, we successfully have created a generic list with `filter`, `sort` and `map` functions.
+
+15.7 Digression: lists of numbers and booleans
+You cannot use a list of primitive types, but you can use the wrappers `String`, `Boolean` and `Double`.
+
+Ex.
+
+```java
+IList<Integer> ints = new ConsList<Integer>(1,
+                        new ConsList<Integer>(4, new MtList<Integer>()));
+```
+
+15.8 Subtleties and challenges with generic types
+
+They also introduced foldr as a way to calculate the result of an operation to the entire list but without being specific.
+
+For ex. for calculate `totalPrice` for books, will be adhoc for without this approach.
+
+This is the good implementation:
+
+```java
+// Interface for two-argument function-objects with signature [A1, A2 -> R]
+interface IFunc2<A1, A2, R> {
+  R apply(A1 arg1, A2 arg2);  // given two arguments returns a result
+}
+```
+
+```java
+// In IList<T>
+<U> U foldr(IFunc2<T, U, U> func, U base);
+```
+
+```java
+// In MtList<T>
+public <U> U foldr(IFunc2<T, U, U> func, U base) {
+  return base;
+}
+ ```
+
+```java
+// In ConsList<T>
+public <U> U foldr(IFunc2<T, U, U> func, U base) {
+  return func.apply(this.first,
+                    this.rest.foldr(func, base));
+}
+```
+
+As you can see, pretty trivial.
+
+now `totalPrice` is trivial too.
+
+```java
+class SumPricesOfBooks implements IFunc2<Book, Integer, Integer> {
+  public Integer apply(Book b, Integer sum) {
+    return b.price() + sum;
+  }
+}
+```
+
+and in a function object helper:
+
+```java
+// Example of using foldr and the function object to obtain the total price
+class Utils {
+  Integer totalPrice(IList<Book> books) {
+    return books.foldr(new SumPricesOfBooks(), 0);
+  }
+}
+```
+
+15.8.4 Digression: Function objects in recent Java
+
+These interfaces for `IFunc`, `IFunc2` and `IPred` are so helpful that they are already defined on `java.util.function` package but under another names.
+
+15.9 Summary
+
+`Predicate`, `IFunc`, `IFunc2` will help you remove a lot of boilerplate designing your code.
+
+In next lecture, we’ll combine the material of these past four lectures to answer a seemingly simple question: How can I take an IList<IShape> and get a list of the perimeters of the shapes?
