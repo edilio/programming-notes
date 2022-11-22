@@ -642,3 +642,147 @@ public ILoRunner findAllFemaleRunners() {
 
 13.2 Abstracting over behavior: Function objects
 
+Looking at the definitions above, we can see a lot of repetitive code. Whenever we see such repetition, we know that the design recipe for abstraction tells us to find the parts of the code that differ, find the parts of the code that are the same, and separate the common parts of the code into a single shared implementation. Trying that here, we see the following common pattern:
+
+```java
+// In MtLoRunner
+public ILoRunner find...() { return this; }
+```
+
+```java
+// In ConsLoRunner
+public ILoRunner find...() {
+  if (this.first...) {
+    return new ConsLoRunner(this.first, this.rest.find...());
+  }
+  else {
+    return this.rest.find...();
+  }
+}
+```
+
+The only parts that differ are the precise names of the find... methods and the precise condition we test on this.first.
+
+We want different behaviors for this test but what abstraction can we use?
+- Abstract classes won’t help: they let us share field and method definitions
+- Inheritance won’t help: we don’t want to define subtypes of lists that can each answer just one question, but rather one kind of list that can answer multiple questions.
+- Delegation might help...but how? We’re already delegating to the Runner class, and cluttering its definition with lots of little helpers.
+
+We need `higher-order functions`, where we can pass in the function to do the test on Runners for us. But Java doesn't have functions: it only has `classes` and `methods`.
+
+Look at the signatures for the helper methods we defined in the Runner class: they all operate on a Runner and produce a boolean. Suppose instead of defining these helper methods as methods on the Runner class, we defined them individually as methods in helper classes. Instead of having this be the Runner, we’ll have these methods take a Runner as a parameter:
+
+```java
+class RunnerIsMale {
+  boolean isMaleRunner(Runner r) { return r.isMale; }
+}
+
+class RunnerIsFemale {
+  boolean isFemaleRunner(Runner r) { return !r.isMale; }
+}
+
+class RunnerIsInFirst50 {
+  boolean isInFirst50(Runner r) { return r.pos <= 50; }
+}
+```
+
+Not much improvement, but refactoring using an interface and changing the name if the function to apply...
+
+```java
+interface IRunnerPredicate {
+  boolean apply(Runner r);
+}
+
+class RunnerIsMale implements IRunnerPredicate {
+  public boolean apply(Runner r) { return r.isMale; }
+}
+
+class RunnerIsFemale implements IRunnerPredicate {
+  public boolean apply(Runner r) { return !r.isMale; }
+}
+
+class RunnerIsInFirst50 implements IRunnerPredicate {
+  public boolean apply(Runner r) { return r.pos <= 50; }
+}
+```
+
+We name the interface `IRunnerPredicate` because it describes objects that can answer a boolean-valued question (i.e., a `predicate`) on Runners.
+
+Refactoring the list to use `IRunnerPredicate` abstraction.
+
+```java
+// In ILoRunner
+ILoRunner find(IRunnerPredicate pred);
+```
+
+```java
+// In MtLoRunner
+public ILoRunner find(IRunnerPredicate pred) { return this; }
+```
+
+```java
+// In ConsLoRunner
+public ILoRunner find(IRunnerPredicate pred) {
+  if (pred.apply(this.first)) {
+    return new ConsLoRunner(this.first, this.rest.find(pred));
+  }
+  else {
+    return this.rest.find(pred);
+  }
+}
+```
+
+To use these new function objects, we rewrite our tests:
+
+```java
+// In Examples class
+boolean testFindMethods(Tester t) {
+  return
+    t.checkExpect(this.list2.find(new RunnerIsFemale()),
+                  new ConsLoRunner(this.joan, new MtLoRunner())) &&
+    t.checkExpect(this.list2.find(new RunnerIsMale()),
+                  new ConsLoRunner(this.frank,
+                    new ConsLoRunner(this.bill,
+                      new ConsLoRunner(this.johnny, new MtLoRunner()))));
+}
+```
+
+So, in order to answer all the questions we just need to run find with a new class that implements the `IRunnerPredicate`.
+
+If we want to answer questions we don't have a predicate yet, all we need do is define a new class implementing `IRunnerPredicate`:
+
+```java
+class FinishIn4Hours implements IRunnerPredicate {
+  public boolean apply(Runner r) { return r.time < 240; }
+}
+```
+
+And we just used as in the previous example.
+
+We don’t have to modify the `Runner`, `MtLoRunner` and `ConsLoRunner` classes or the `ILoRunner` interface at all!
+
+13.3 Compound questions
+
+How might we find the list of all female runners younger than 40 who started in the first 50 starting positions? We could continue to define new IRunnerPredicate classes for each of these...but notice that we’ve already answered each of the component questions here. It would be a shame not to be able to reuse their implementations.
+
+We can define a new class, AndPredicate, as follows:
+
+```java
+// Represents a predicate that is true whenever both of its component predicates are true
+class AndPredicate implements IRunnerPredicate {
+  IRunnerPredicate left, right;
+  AndPredicate(IRunnerPredicate left, IRunnerPredicate right) {
+    this.left = left;
+    this.right = right;
+  }
+  public boolean apply(Runner r) {
+    return this.left.apply(r) && this.right.apply(r);
+  }
+}
+```
+
+To use it:
+
+```java
+IRunnerPredicate pre = new AndPredicate(new RunnerIsMale(), new FinishIn4Hours())
+```
