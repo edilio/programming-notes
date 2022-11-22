@@ -873,3 +873,119 @@ marathon.sortByTime()
 ```java
 marathon.sortBy(new CompareByTime())
 ```
+
+14.2 Three-valued comparisons
+
+Instead of `comesBefore` returning a boolean, we want to change ti to an integer so we can also know if they are tie.
+
+```java
+// To compute a three-way comparison between two Runners
+interface IRunnerComparator {
+  // Returns a negative number if r1 comes before r2 in this order
+  // Returns zero              if r1 is tied with r2 in this order
+  // Returns a positive number if r1 comes after  r2 in this order
+  int compare(Runner r1, Runner r2);
+}
+```
+
+(A mnemonic for the name: A comparator is something that can compare. A `IRunnerComparator` is therefore something that can compare two Runners.)
+To adapt our sortBy method to use this new interface, we just need to change the use of comesBefore:
+
+```java
+// In ConsLoRunner
+public ILoRunner insertBy(IRunnerComparator comp, Runner r) {
+  // comp.compare will return a negative number if its first argument comes first
+  if (comp.compare(this.first, r) < 0) {
+    return new ConsLoRunner(this.first, this.rest.insertBy(comp, r));
+  }
+  else {
+    return new ConsLoRunner(r, this);
+  }
+}
+```
+
+Modifying our CompareByTime class is also straightforward. The purpose statement for the compare method suggests we might want a three-way if-statement:
+
+```java
+class CompareByTime implements IRunnerComparator {
+  public int compare(Runner r1, Runner r2) {
+    if (r1.time < r2.time)       { return -1; }
+    else if (r1.time == r2.time) { return 0;  }
+    else                         { return 1;  }
+  }
+}
+```
+
+In this case specifically using `-1, 0 and 1` but can be also:
+
+```java
+class CompareByTime implements IRunnerComparator {
+  public int compare(Runner r1, Runner r2) {
+    return r1.time - r2.time;
+  }
+}
+```
+14.3 Finding the winner of the race, two ways
+
+Show why `marathon.sortBy(new CompareByTime()).first` is not good.
+
+And its variant using the interface is not so good neither.
+
+14.3.1 The smarter way
+
+It seems a wasteful to find the minimum of list, sorting an entire list of Runners and produce an entirely new sorted list, only to take the first item and throw the rest of the list away! If most of that information is unneeded, could we be cleverer and avoid constructing the entire list?
+
+More generally, we might want to find the minimum runner according to any comparison, by keeping track of the minimum seen so far.
+
+```java
+// In ILoRunner
+Runner findMin(IRunnerComparator comp);
+```
+
+```java
+// In ConsLoRunner
+public Runner findWinner() { return this.findMin(new CompareByTime()); }
+```
+
+```java
+// In MtLoRunner
+public Runner findMin(IRunnerComparator comp) {
+  throw new RuntimeException("No minimum runner available in this list!");
+}
+```
+
+When we realize that `findMin` in `ConsLoRunner` will give us problems we realized we need a helper function `findMinHelp` which will accept an accumulator too.
+
+```java
+// In ConsLoRunner
+public Runner findMinHelp(IRunnerComparator comp, Runner acc) {
+  if (comp.compare(acc, this.first) < 0) {
+    // The accumulator is still the minimum
+    return this.rest.findMinHelp(comp, acc);
+  }
+  else {
+    // this.first comes before the accumulator
+    return this.rest.findMinHelp(comp, this.first);
+  }
+}
+
+public Runner findMin(IRunnerComparator comp) {
+  return this.rest.findMinHelp(comp, this.first);
+}
+```
+
+14.4 Computing the registration roster: sorting alphabetically
+
+How to sort the marathon alphabetically by name?
+
+Easy now:
+
+```java
+class CompareByName implements IRunnerComparator {
+  public int compare(Runner r1, Runner r2) {
+    return r1.name.compareTo(r2.name);
+  }
+}
+```
+
+So, `marathon.sortBy(new CompareByName())` will do it.
