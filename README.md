@@ -94,6 +94,7 @@
 - Linked list
 - Stack
 - Queue
+- Deque
 - Tree
 - Graph
 - Hash table
@@ -101,6 +102,7 @@
 - Hash set
 - Binary tree
 - Binary search tree
+- Heap
 
 ## [Scrum events, processes and concepts](https://en.wikipedia.org/wiki/Scrum_(software_development))
 - [Sprint](https://en.wikipedia.org/wiki/Scrum_(software_development)#Sprint)
@@ -146,7 +148,13 @@
 [Programming Language Popularity](https://www.tiobe.com/tiobe-index/)
 
 ## Important algorithms
+
+### Search
 - [Binary search](https://en.wikipedia.org/wiki/Binary_search_tree)
+- [Depth-first search](https://en.wikipedia.org/wiki/Depth-first_search)
+- [Breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search)
+
+### Sorting
 - [Merge sort](https://en.wikipedia.org/wiki/Merge_sort)
 - [Quick sort](https://en.wikipedia.org/wiki/Quicksort)
 - [Heap sort](https://en.wikipedia.org/wiki/Heapsort)
@@ -154,9 +162,9 @@
 - [Bucket sort](https://en.wikipedia.org/wiki/Bucket_sort)
 - [Counting sort](https://en.wikipedia.org/wiki/Counting_sort)
 - [Bogo sort](https://en.wikipedia.org/wiki/Bogo_sort)
-- [Depth-first search](https://en.wikipedia.org/wiki/Depth-first_search)
-- [Breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search)
 
+- Dijkstra’s Algorithm for single-source shortest paths
+- Bellman-Ford Algorithm for single-source shortest paths
 
 ## Web development
 - [HTML](https://en.wikipedia.org/wiki/HTML)
