@@ -1232,3 +1232,82 @@ These interfaces for `IFunc`, `IFunc2` and `IPred` are so helpful that they are 
 `Predicate`, `IFunc`, `IFunc2` will help you remove a lot of boilerplate designing your code.
 
 In next lecture, we’ll combine the material of these past four lectures to answer a seemingly simple question: How can I take an IList<IShape> and get a list of the perimeters of the shapes?
+
+## Lecture 16: Visitors(Double dispatch)
+
+Visitors as generic function objects over union data
+
+Starting with:
+
+```java
+interface IShape {
+    // To return the result of applying the given visitor to this IShape
+    <R> R accept(IFShapeVisitor<R> visitor);
+}
+
+class Circle implements IShape {
+  int x, y;
+  int radius;
+  String color;
+  Circle(int x, int y, int r, String color) {
+    this.x = x;
+    this.y = y;
+    this.radius = r;
+    this.color = color;
+  }
+  <R> R accept(IFShapeVisitor<R> visitor) {
+    return visitor.visitCircle(this);
+  }
+}
+
+class Rect implements IShape {
+  int x, y, w, h;
+  String color;
+  Rect(int x, int y, int w, int h, String color) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.color = color;
+  }
+  <R> R accept(IFShapeVisitor<R> visitor) {
+    return visitor.visitRect(this);
+  }
+}
+```
+
+and an `IList<IShape>`
+
+We want to obtain the list of areas of all the shapes in the list.
+
+Obviously we could have area in every class, that is way to do it but the visitor pattern will show you another way. At first, it will seem more complicated but at the end you will notice the good parts.
+
+You will be tented to use the `instanceof` operator and casting but that is not the way to go.
+
+The idea is two use double dispatch to call the right method on the right object. Designing this way we will be able to add new shapes without changing the code but also design new operations without changing the code.
+
+Let's start with the visitor interface that from a shape will return a double. It will be useful for area but also for other calculations like perimeter.
+
+```java
+// An IShapeVisitor is a function over IShapes
+interface IShapeVisitor<R> extends IFunc<IShape, R> {
+  R visitCircle(Circle c);
+  R visitSquare(Square s);
+  R visitRect(Rect r);
+}
+```
+
+```java
+// ShapeArea is a function object over IShapes that computes their area
+class ShapeArea implements IShapeVisitor<Double> {
+  // Everything from the IShapeVisitor interface:
+  public Double visitCircle(Circle c) { return Math.PI * c.radius * c.radius; }
+  public Double visitSquare(Square s) { return s.side * s.side; }
+  public Double visitRect(Rect r) { return r.w * r.h; }
+ 
+  // Everything from the IFunc interface:
+  public Double apply(IShape s) { return s.accept(this); }
+}
+```
+
+The double dispatch is done by the `accept` method in the `IShape` interface.
