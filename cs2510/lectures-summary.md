@@ -1395,3 +1395,73 @@ class Counter {
 With all these potential hazards, what are mutation and side effects actually good for? Let’s not forget that it is essential for creating these cyclic data structures, and we’ll see that cyclic data comes up naturally over and over again.
 
 Additionally, side effects are very useful when interacting with the rest of the world (i.e., the part outside the computer). Once words appear on the screen and the user has read them, they can’t be un-read; once a user has sent an email, it can’t be un-sent. Side effects let us describe these changes to the state of the world. We’ll see more examples of dealing with these kinds of side effects later.
+
+
+## Lecture 18: Mutation inside structures
+
+They introduced `void` and the idea that all mutations are done through `void` methods.
+
+Instead of having a `set` method, we have a `void` method that changes the state of the object.
+
+They also refactored the constructor to avoid passing `null` to the constructor.
+
+The method allows is not only do a mutation but also check if the mutation is valid, raising an `Exception` if it is not.
+
+```java 
+// In Author
+// EFFECT: modifies this Author's book field to refer to the given Book
+void updateBook(Book b) {
+  if (this.book != null) {
+    throw new RuntimeException("trying to add second book to an author");
+  }
+  else {
+    this.book = b;
+  }
+}
+```
+ 
+Finally, they added a list of books to the author so finally we have a cyclic(indirect) data that represents better the real world.
+
+```java
+class Book {
+  String title;
+  int price;
+  int quantity;
+  Author author;
+  Book(String title, int price, int quantity, Author ath) {
+    this.title = title;
+    this.price = price;
+    this.quantity = quantity;
+    this.author = ath;
+    // NEW! Fix up the author for us, using *this* newly-constructed Book
+    this.author.updateBook(this);
+  }
+}
+```
+
+```java
+class Author {
+  String first;
+  String last;
+  int yob;
+  IList<Book> books;
+  Author(String fst, String lst, int yob) {
+    this.first = fst;
+    this.last = lst;
+    this.yob = yob;
+    this.books = new MtList<Book>();
+  }
+}
+
+// EFFECT: modifies this Author's book field to refer to the given Book
+void addBook(Book b) {
+  if (!b.author.sameAuthor(this)) {
+    throw new RuntimeException("book was not written by this author");
+  }
+  else {
+    this.books = new ConsList<Book>(b, this.books);
+  }
+}
+```
+
+Now that they taught us `void` they say there is no need for test functions to return boolean values.
