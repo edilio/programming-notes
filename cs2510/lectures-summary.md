@@ -1311,3 +1311,87 @@ class ShapeArea implements IShapeVisitor<Double> {
 ```
 
 The double dispatch is done by the `accept` method in the `IShape` interface.
+
+## Lecture 17: Mutation
+
+Creating cyclic data, hazards of working with mutation
+
+Books and authors example.(a book has an author and an author has a list of books, or a book in this case)
+
+```java
+// Represents authors of books
+class Author {
+  String first;
+  String last;
+  int yob;
+  Book book;
+  Author(String fst, String lst, int yob, Book bk) {
+    this.first = fst;
+    this.last = lst;
+    this.yob = yob;
+    this.book = bk;
+  }
+}
+ 
+// Represent books
+class Book {
+  String title;
+  int price;
+  int quantity;
+  Author author;
+  Book(String title, int price, int quantity, Author ath) {
+    this.title = title;
+    this.price = price;
+    this.quantity = quantity;
+    this.author = ath;
+  }
+}
+```
+
+
+One way to create a cyclic data is to create an author with no book, then create a book with that author, and then set the book to the author.
+
+```java
+Author knuth = new Author("Donald", "Knuth", 1938, null);
+Book artOfComputerProgramming = new Book("The Art of Computer Programming", 100, 10, knuth);
+knuth.book = artOfComputerProgramming;
+```
+
+Syntactically, this is very similar to how we initialize fields in the constructors of objects. But don’t be fooled: assignment statements are very different! Initializing fields lets us “define the field” to be equal to the given value, and in that sense initializations are at least somewhat like mathematical equations that assert two things to be equal. But assignment statements do not assert such an equality — in the assignment statement above, we know that knuth.book is equal to null! Assignments change the meaning of the variable on the left hand side, for the rest of the program...or at least until the next assignment to that same variable changes its meaning again.
+
+17.5 Interlude: local variables
+
+What are local variables?
+
+17.6 Interlude: Statements versus expressions
+
+17.7 Warning: Side effects may vary
+
+The net effect of an assignment statement, namely a change to a variable, is known as `mutation`. Since statements on their own do not evaluate to values, the only way we can observe what they’ve done is by their `side effects`. This has some fairly drastic consequences for our programs.
+
+17.7.3 Non-testable code
+
+Example of mutation creating a code difficult to test because of the side effects.
+
+```java
+class Counter {
+  int val;
+  Counter() {
+    this(0);
+  }
+  Counter(int initialVal) {
+    this.val = initialVal;
+  }
+  int get() {
+    int ans = this.val;
+    this.val = this.val + 1;
+    return ans;
+  }
+}
+```
+
+17.8 Discussion
+
+With all these potential hazards, what are mutation and side effects actually good for? Let’s not forget that it is essential for creating these cyclic data structures, and we’ll see that cyclic data comes up naturally over and over again.
+
+Additionally, side effects are very useful when interacting with the rest of the world (i.e., the part outside the computer). Once words appear on the screen and the user has read them, they can’t be un-read; once a user has sent an email, it can’t be un-sent. Side effects let us describe these changes to the state of the world. We’ll see more examples of dealing with these kinds of side effects later.
