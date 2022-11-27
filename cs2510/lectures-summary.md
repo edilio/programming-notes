@@ -1465,3 +1465,80 @@ void addBook(Book b) {
 ```
 
 Now that they taught us `void` they say there is no need for test functions to return boolean values.
+
+## Lecture 19: Mutation, aliasing and testing
+
+Sharing objects between multiple data structures, modifying fields of aliased objects, modifying list structures.
+
+19.1 Introduction
+
+Phone books: were used to maintain lists of people and their phone numbers. Often, people maintained several such phone books
+- one for family
+- one for friends
+- one for colleagues, etc.
+
+Any given contact might appear in multiple lists.
+
+19.2 Phone lists, take 1
+
+```java
+class Person {
+  String name;
+  int phone;
+  Person(String name, int phone) {
+    this.name = name;
+    this.phone = phone;
+  }
+  // Returns true when the given person has the same name and phone number as this person
+  boolean samePerson(Person that) {
+    return this.name.equals(that.name) && this.phone == that.phone;
+  }
+  // Returns true when this person has the same name as a given String
+  boolean sameName(String name) {
+    return this.name.equals(name);
+  }
+  // Returns the number of this person when they have the same name as a given String
+  int phoneOf(String name) {
+    if (this.name.equals(name)) {
+      return this.phone;
+    }
+    else {
+      throw new RuntimeException("The given name does not match this person's name");
+    }
+  }
+}
+```
+
+Examples: Construct a few examples of people and phone lists.
+
+```java
+
+class ExamplePhoneLists {
+  Person anne = new Person("Anne", 1234);
+  Person bob = new Person("Bob", 3456);
+  Person clyde = new Person("Clyde", 6789);
+  Person dana = new Person("Dana", 1357);
+  Person eric = new Person("Eric", 12469);
+  Person frank = new Person("Frank", 7294);
+  Person gail = new Person("Gail", 9345);
+  Person henry = new Person("Henry", 8602);
+  Person irene = new Person("Irene", 91302);
+  Person jenny = new Person("Jenny", 8675309);
+ 
+  ILoPerson friends, family, work;
+  void initData() {
+    this.friends =
+      new ConsLoPerson(this.anne, new ConsLoPerson(this.clyde,
+        new ConsLoPerson(this.gail, new ConsLoPerson(this.frank,
+          new ConsLoPerson(this.jenny, new MtLoPerson())))));
+    this.family =
+      new ConsLoPerson(this.anne, new ConsLoPerson(this.dana,
+        new ConsLoPerson(this.frank, new MtLoPerson())));
+    this.work =
+      new ConsLoPerson(this.bob, new ConsLoPerson(this.clyde,
+        new ConsLoPerson(this.dana, new ConsLoPerson(this.eric,
+          new ConsLoPerson(this.henry, new ConsLoPerson(this.irene,
+            new MtLoPerson()))))));
+  }
+}
+```

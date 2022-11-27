@@ -61,3 +61,9 @@ t.checkConstructorException(
      // the arguments for the constructor
      53000, 12, 30);              
 ```
+
+## Recipe for testing mutation(side effects) methods:
+
+1. Create a test fixture in a consistent, well-known state. 
+2. Run the method. 
+3. Check for the expected side effects, and also (if possible) for unexpected side effects.

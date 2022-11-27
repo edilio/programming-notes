@@ -10,8 +10,8 @@
 - Accumulators for recursive algorithms
 - How to use interfaces to create `Predicates`, `Comparators` and `IFuncs` so we can see how to refactor `Generic` Lists to have `filter`, `sort`, `map` and `foldr`(reduce).
 - Double dispatch(For SameXXX and for visitor pattern)
-- Mutations
-- Aliasing
+- Mutations(side effects)
+- Aliasing(when two variables refer to the same object)
 - Cycle data structures(direct and indirect)
 - Iterables
 
