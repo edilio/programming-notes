@@ -1940,4 +1940,47 @@ For completeness, here is the version of binarySearch that works for arbitrary e
 
 22.5 Sorting an ArrayList
 
+They introduced the `counted-for loop`
+
+Exercise
+
+Practice using the counted-for loop: design a method
+
+```java
+<T> ArrayList<T> interleave(ArrayList<T> arr1, ArrayList<T> arr2) {
+  ArrayList<T> result = new ArrayList<T>();
+  for (int i = 0; i < arr1.size(); i = i + 1) {
+    result.add(arr1.get(i));
+    result.add(arr2.get(i));  
+  }
+  return result;
+}
+
+```
+
+that takes two ArrayLists of the same size, and produces an output ArrayList consisting of one item from arr1, then one from arr2, then another from arr1, etc.
+
+Design a method
+
+```
+java<T> ArrayList<T> unshuffle(ArrayList<T> arr)
+```
+
+that takes an input ArrayList and produces a new list containing the first, third, fifth ... items of the list, followed by the second, fourth, sixth ... items.
+
 22.6 Finding the minimum value in an ArrayList
+
+```java
+<T> T min(ArrayList<T> arr, IComparator<T> comp) {
+    if arr.size() == 0 {
+        throw new IllegalArgumentException("min: empty list");
+    }
+    T minSoFar = arr.get(0);
+    for (T t : arr) {
+        if (comp.compare(t, minSoFar) < 0) {
+            minSoFar = t;
+        }
+    }
+    return minSoFar;
+}
+```
