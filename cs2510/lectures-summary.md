@@ -1694,3 +1694,109 @@ interface IMutableList<T> {
   int size();
 }
 ```
+
+## Lecture 21: ArrayLists
+
+Working with Java’s built-in mutable lists
+
+21.1 Introducing ArrayLists
+
+```java
+interface IMutableList<T> {
+  // adds an item to the (front of) the list
+  void addToFront(T t);
+  // adds an item to the end of the list
+  void addToEnd(T t);
+  // removes an item from list (uses intensional equality)
+  void remove(T t);
+  // removes the first item from the list that passes the predicate
+  void remove(IPred<T> whichOne);
+  // gets the numbered item (starting at index 0) of the list
+  T get(int index);
+  // sets (i.e. replaces) the numbered item (starting at index 0) with the given item
+  void set(int index, T t);
+  // inserts the given item at the numbered position
+  void insert(int index, T t);
+  // returns the length of the list
+  int size();
+}
+```
+
+This interface does not actually exist, instead, Java defines a class for us that provides essentially these (and other) methods anyway: the `ArrayList<T>` class.
+
+```java
+import java.util.ArrayList;
+```
+
+Unlike our `IList<T>` and its attendant `ConsList<T>` and `MtList<T>` classes:
+- we do not control the implementation of `ArrayList<T>`
+- we cannot add methods to it
+- we cannot use dynamic dispatch to recur over its structure
+- we actually have no visibility into how the class is implemented at all. And we shouldn’t have to!
+
+It suffices to know that we can manipulate an `ArrayList<T>` using its methods, rather than knowing how those methods are implemented.
+
+21.2 Obtaining items from an ArrayList
+
+Use `get` method but remember that the index starts at 0 and if you try to get a value that is not in the list, you will get an `IndexOutOfBoundsException`.
+
+21.3 Manipulating items via indices: moving two items
+
+Example of how to swap two items in an `ArrayList<T>`.
+
+```java
+class ArrayUtils {
+    // In ArrayUtils
+    <T> void swap(ArrayList<T> arr, int index1, int index2) {
+      T oldValueAtIndex1 = arr.get(index1);
+      T oldValueAtIndex2 = arr.get(index2);
+      
+      arr.set(index2, oldValueAtIndex1);
+      arr.set(index1, oldValueAtIndex2);
+    }
+}
+```
+
+21.4 Transforming ArrayLists with map: introducing for-each loops
+
+21.4.1 Mapping via recursion first
+
+```java
+// In ArrayUtils
+// Computes the result of mapping the given function over the source list
+// from the given current index to the end of the list, and returns the
+// given destination list
+// EFFECT: modifies the destination list to contain the mapped results
+<T, U> ArrayList<U> mapHelp(ArrayList<T> source, IFunc<T, U> func,
+                            int curIdx, ArrayList<U> dest) {
+  if (curIdx >= source.size()) {
+    return dest;
+  }
+  else {
+    dest.add(func.apply(source.get(curIdx)));
+    return this.mapHelp(source, func, curIdx + 1, dest);
+  }
+}
+
+<T, U> ArrayList<U> map(ArrayList<T> arr, IFunc<T, U> func) {
+  ArrayList<U> result = new ArrayList<U>();
+  return this.mapHelp(arr, func, 0, result);
+}
+```
+
+21.4.2 Using for-each loops
+
+```java
+// In ArrayUtils
+<T, U> ArrayList<U> map(ArrayList<T> arr, IFunc<T, U> func) {
+  ArrayList<U> result = new ArrayList<U>();
+  for (T t : arr) {
+    result.add(func.apply(t));
+  }
+  return result;
+}
+```
+
+Exercise
+
+Implement `foldr` and `foldl` for ArrayLists, first using recursion and then again using for-each loops. (Hint: one of these will be much harder than the other, when using for-each loops.)
