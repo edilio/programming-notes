@@ -27,3 +27,16 @@
 - this
 - super
 - side effects
+
+# Data Structures
+
+- Lists
+- Trees
+- Deques
+
+# Algorithms
+- Binary Search
+- Foldr, Foldl(Reduce)
+- Map
+- Filter
+- Sort(insertion sort, merge sort, quick sort)

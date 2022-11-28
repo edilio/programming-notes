@@ -1800,3 +1800,58 @@ class ArrayUtils {
 Exercise
 
 Implement `foldr` and `foldl` for ArrayLists, first using recursion and then again using for-each loops. (Hint: one of these will be much harder than the other, when using for-each loops.)
+
+## Lecture 22: ArrayLists
+
+Binary search over sorted ArrayLists, sorting ArrayLists
+
+22.1 Finding an item in an arbitrary ArrayList
+
+```java
+// In ArrayUtils
+// Returns the index of the first item passing the predicate,
+// or -1 if no such item was found
+<T> int find(ArrayList<T> arr, IPred<T> whichOne) {
+  return findHelp(arr, whichOne, 0);
+}
+
+// Returns the index of the first item passing the predicate at or after the
+// given index, or -1 if no such such item was found
+<T> int findHelp(ArrayList<T> arr, IPred<T> whichOne, int index) {
+  if (index >= arr.size()) {
+    return -1;
+  }
+  else if (whichOne.apply(arr.get(index)) {
+    return index;
+  }
+  else {
+    return findHelp(arr, whichOne, index + 1);
+  }
+}
+```
+
+Not sure why they don't use the for each loop here returning once `whichOne.apply` returns `true`.
+
+This one in particular:
+```java
+<T> int find(ArrayList<T> arr, IPred<T> whichOne) {
+  int index = 0;
+  for (T t : arr) {
+    if (whichOne.apply(t)) {
+      return index;
+    }
+    index = index + 1;
+  }
+  return index;
+}
+```
+
+22.2 Finding an item in a sorted ArrayList – version 1
+
+22.3 Finding an item in a sorted ArrayList – version 2
+
+22.4 Generalizing to arbitrary element types
+
+22.5 Sorting an ArrayList
+
+22.6 Finding the minimum value in an ArrayList
