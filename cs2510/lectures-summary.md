@@ -1848,9 +1848,95 @@ This one in particular:
 
 22.2 Finding an item in a sorted ArrayList – version 1
 
+Assuming String list for simplicity, so we can relate the sorting to sorting a dictionary.
+
+```java
+/ Returns the index of the target string in the given ArrayList, or -1 if the string is not found
+// Assumes that the given ArrayList is sorted aphabetically
+int binarySearch(ArrayList<String> strings, String target) {
+  return binarySearchHelp(strings, target, 0, strings.size() - 1);
+}
+
+// Returns the index of the target string in the given ArrayList, or -1 if the string is not found
+// Assumes that the given ArrayList is sorted aphabetically
+int binarySearchHelp_v1(ArrayList<String> strings, String target, int lowIdx, int highIdx) {
+  int midIdx = (lowIdx + highIdx) / 2;
+  if (lowIdx > highIdx) {
+    return -1;                                                           // not found
+  }
+  else if (target.compareTo(strings.get(midIdx)) == 0) {
+    return midIdx;                                                       // found it!
+  }
+  else if (target.compareTo(strings.get(midIdx)) > 0) {
+    return this.binarySearchHelp_v1(strings, target, midIdx + 1, highIdx); // too low
+  }
+  else {
+    return this.binarySearchHelp_v1(strings, target, lowIdx, midIdx - 1); // too high
+  }
+}
+```
+
+
 22.3 Finding an item in a sorted ArrayList – version 2
 
+All those adding and subtracting 1s from the indices are tricky to get right, and if we miss even one of them, our code could loop indefinitely. Perhaps there’s a cleaner, less brittle way we could organize our code to avoid these.
+
+Because lowIdx and highIdx are inclusive bounds, they represent a closed interval. It is difficult to split `closed intervals`.
+
+It’s easy to split a `semi-open interval` in two: we can split an interval [𝑙,ℎ) into [𝑙,𝑚) and [𝑚,ℎ), for any 𝑙≤𝑚≤ℎ, and it’s straightforward to check that both smaller intervals contain all the values of the original interval, and that the smaller intervals do not overlap.
+
+```java
+// In ArrayUtils
+// Returns the index of the target string in the given ArrayList, or -1 if the string is not found
+// Assumes that the given ArrayList is sorted aphabetically
+// Assumes that [lowIdx, highIdx) is a semi-open interval of indices
+int binarySearchHelp_v2(ArrayList<String> strings, String target, int lowIdx, int highIdx) {
+  int midIdx = (lowIdx + highIdx) / 2;
+  if (lowIdx >= highIdx) {
+    return -1;                                                           // not found
+  }
+  else if (target.compareTo(strings.get(midIdx)) == 0) {
+    return midIdx;                                                       // found it!
+  }
+  else if (target.compareTo(strings.get(midIdx)) > 0) {
+    return this.binarySearchHelp_v2(strings, target, midIdx + 1, highIdx); // too low
+  }
+  else {
+    return this.binarySearchHelp_v2(strings, target, lowIdx, midIdx);     // too high
+  }
+}
+
+int binarySearch_v2(ArrayList<String> strings, String target) {
+  return this.binarySearchHelp_v2(strings, target, 0, strings.size());
+}
+```
+
 22.4 Generalizing to arbitrary element types
+
+For completeness, here is the version of binarySearch that works for arbitrary element types. Our signature gets slightly more complicated, but the logic behind the index computations and comparisons remains the same:
+
+```java
+// In ArrayUtils
+<T> int gen_binarySearch_v2(ArrayList<T> arr, T target, IComparator<T> comp) {
+  return this.gen_binarySearchHelp_v2(arr, target, comp, 0, arr.size());
+}
+<T> int gen_binarySearchHelp_v2(ArrayList<T> arr, T target, IComparator<T> comp,
+                                int lowIdx, int highIdx) {
+  int midIdx = (lowIdx + highIdx) / 2;
+  if (lowIdx >= highIdx) {
+    return -1;
+  }
+  else if (comp.compare(target, arr.get(midIdx)) == 0) {
+    return midIdx;
+  }
+  else if (comp.compare(target, arr.get(midIdx)) > 0) {
+    return this.gen_binarySearchHelp_v2(arr, target, comp, midIdx + 1, highIdx);
+  }
+  else {
+    return this.gen_binarySearchHelp_v2(arr, target, comp, lowIdx, midIdx);
+  }
+}
+```
 
 22.5 Sorting an ArrayList
 
