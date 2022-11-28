@@ -527,7 +527,7 @@ class Combo extends AShape {
 
 and add the method `sameCombo` to the interface and the default implementation to the abstract class(`AShape`)
 
-## Lecture 13: Abstracting over behavior
+## Lecture 13: Abstracting over behavior(Function objects)
 
 ```java
 interface ILoRunner {}
@@ -803,7 +803,7 @@ class AndPredicate implements IRunnerPredicate {
 }
 ```
 
-Lecture 14: Abstractions over more than one argument
+## Lecture 14: Abstractions over more than one argument
 
 14.1 Finding the final standings
 
@@ -990,7 +990,7 @@ class CompareByName implements IRunnerComparator {
 
 So, `marathon.sortBy(new CompareByName())` will do it.
 
-Lecture 15: Abstracting over types(Generics)
+## Lecture 15: Abstracting over types(Generics)
 
 15.1 The need for more abstraction
 
@@ -1553,7 +1553,7 @@ Aliasing: two different names for the same object. In Java, this is done by assi
 
 They show some other examples of aliasing.
 
-## Lecture 20: Lecture 20: Mutable data structures
+## Lecture 20: Mutable data structures
 
 Removing items from a `list`, `sentinels`, and `wrappers`
 
@@ -1607,8 +1607,8 @@ void removePerson(String name) {
 This particular technique of introducing an extra object between what we have (the variable friends) and what we want (the data in the list) is called adding a layer of indirection. In courses on algorithms and data structures, you will see many, many more examples of using indirection to solve problems that seem difficult or impossible, otherwise.
 
 `Sentinels`: a special object that is used to mark the beginning or end of a list.
-
 This leads to the following tentative class design:
+```java
 +------------------------------------------------+
 | ILoPerson                                      |
 +------------------------------------------------+
@@ -1631,11 +1631,14 @@ This leads to the following tentative class design:
 +----------+    +--------------+  +------------+
 +----------+    | Person data  |  +------------+
                 +--------------+
+```
 
 20.6 Revising our data structure: Introducing wrappers
 
 Introducing the idea of a wrapper is the second time we have encountered a data definition where not every part of the data definition is dedicated to the purpose of holding data.
 So our new, final class design for mutable person lists is:
+
+```java
          +---------------------------------------+
          | MutablePersonList                     |
          +---------------------------------------+
@@ -1665,6 +1668,7 @@ So our new, final class design for mutable person lists is:
 +----------+    +--------------+  +------------+
 +----------+    | Person data  |  +------------+
                 +--------------+
+```
 
 20.6.1 Implementing the nodes of the list
 
