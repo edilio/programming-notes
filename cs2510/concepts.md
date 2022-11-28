@@ -14,6 +14,8 @@
 - Aliasing(when two variables refer to the same object)
 - Cycle data structures(direct and indirect)
 - Iterables
+- Sentinels(a special object that is used to mark the beginning or end of a list)
+- Wrapper classes for lists(wraps around the fiddly details of managing Sentinels and ConsLoPersons and such)
 
 
 # Notes

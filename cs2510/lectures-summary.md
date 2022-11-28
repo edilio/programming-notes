@@ -1542,3 +1542,151 @@ class ExamplePhoneLists {
   }
 }
 ```
+
+19.3 Phone lists, take 2
+
+19.4 Aliasing, or, what’s in a name?
+
+Aliasing: two different names for the same object. In Java, this is done by assigning one variable to another.
+
+19.5 Aliasing, mutation and equality: two notions of equality
+
+They show some other examples of aliasing.
+
+## Lecture 20: Lecture 20: Mutable data structures
+
+Removing items from a `list`, `sentinels`, and `wrappers`
+
+They continue with the phone book example.
+
+Once again, we’ll start with the non-generic ILoPerson type to focus on the essential new aspects of the problem; generalizing to `IList<Person>` is straightforward.
+
+20.1 Removing items from a list: the setup
+
+They start with the test, basically, following the recipe of side effects methods.
+- Check that list contains the item,
+- Remove it
+- Check that it is not there anymore.
+
+20.2 Removing a person by name, part 1
+
+Realising we need a helper function like the ones studied on accumulator chapters.
+
+```java
+// In ILoPerson
+void removePerson(String name);
+void removePersonHelp(String name, ConsLoPerson prev);
+```
+
+```java
+// In MtLoPerson
+void removePerson(String name) { return; }
+void removePersonHelp(String name, ConsLoPerson prev) { return; }
+```
+
+```java
+// In ConsLoPerson
+void removePersonHelp(String name, ConsLoPerson prev) {
+  if (this.first.name.equals(name)) {
+    prev.rest = this.rest; // Modify the previous node to bypass this node
+  }
+  else {
+    this.rest.removePersonHelp(name, this); // this is the previous node of this.rest
+  }
+}
+
+void removePerson(String name) {
+  this.rest.removePersonHelp(name, this);
+}
+```
+
+20.3 Aliasing, again, and removing items from a list
+
+20.5 Revising our data structure: Introducing sentinels
+
+This particular technique of introducing an extra object between what we have (the variable friends) and what we want (the data in the list) is called adding a layer of indirection. In courses on algorithms and data structures, you will see many, many more examples of using indirection to solve problems that seem difficult or impossible, otherwise.
+
+`Sentinels`: a special object that is used to mark the beginning or end of a list.
+
+This leads to the following tentative class design:
++------------------------------------------------+
+| ILoPerson                                      |
++------------------------------------------------+
+| void removePerson(String name)                 |
+| void removePersonHelp(String name, ANode prev) |
++------------------------------------------------+
+               /_\                     /_\
+                |                       |
+       +----------------+               |
+       | ANode          |               |
+       +----------------+               |
+       | ILoPerson rest |               |
+       +----------------+               |
+         /_\       /_\                  |
+          |         |                   |
+     +----+         |                   |
+     |              |                   |
++----------+    +--------------+  +------------+
+| Sentinel |    | ConsLoPerson |  | MtLoPerson |
++----------+    +--------------+  +------------+
++----------+    | Person data  |  +------------+
+                +--------------+
+
+20.6 Revising our data structure: Introducing wrappers
+
+Introducing the idea of a wrapper is the second time we have encountered a data definition where not every part of the data definition is dedicated to the purpose of holding data.
+So our new, final class design for mutable person lists is:
+         +---------------------------------------+
+         | MutablePersonList                     |
+         +---------------------------------------+
+         | void removePerson(String name)        |
+         | void addPerson(String name, int num)  |
+ +-------- Sentinel sentinel                     |
+ |       +---------------------------------------+
+ |
+ |      +------------------------------------------------+
+ |      | APersonList                                    |
+ |      +------------------------------------------------+
+ |      | void removePersonHelp(String name, ANode prev) |
+ |      +------------------------------------------------+
+ |                  /_\              /_\
+ |                   |                |
+ |         +------------------+       |
+ |         | ANode            |       |
+ |         +------------------+       |
+ |         | APersonList rest |       |
+ |         +------------------+       |
+ |           /_\   /_\                |
+ |            |     |                 |
+ |   +--------+     |                 |
+ V   |              |                 |
++----------+    +--------------+  +------------+
+| Sentinel |    | ConsLoPerson |  | MtLoPerson |
++----------+    +--------------+  +------------+
++----------+    | Person data  |  +------------+
+                +--------------+
+
+20.6.1 Implementing the nodes of the list
+
+20.8 Generalizing from MutablePersonLists to mutable lists of arbitrary data
+
+```java
+interface IMutableList<T> {
+  // adds an item to the (front of) the list
+  void addToFront(T t);
+  // adds an item to the end of the list
+  void addToEnd(T t);
+  // removes an item from list (uses intensional equality)
+  void remove(T t);
+  // removes the first item from the list that passes the predicate
+  void remove(IPred<T> whichOne);
+  // gets the numbered item (starting at index 0) of the list
+  T get(int index);
+  // sets (i.e. replaces) the numbered item (starting at index 0) with the given item
+  void set(int index, T t);
+  // inserts the given item at the numbered position
+  void insert(int index, T t);
+  // returns the length of the list
+  int size();
+}
+```
