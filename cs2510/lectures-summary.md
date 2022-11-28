@@ -2079,3 +2079,61 @@ void capitalizeTitles_ok(ArrayList<Book> books) {
 ```
 
 Because we are counting indices, rather than iterating over the contents of the ArrayList directly, we are manually managing the details of which item is “next”, rather than letting the for-each loop manage that for us.
+
+## Lecture 24: While loops
+
+While loops for unbounded iteration
+
+24.1 While loops
+
+A while loop simply repeats a block of code for as long as its termination condition remains true:
+
+```java
+while (someBooleanExpression()) {
+  ...body of loop...
+}
+```
+
+24.1.1 Translating a counted-for loop into a while loop
+
+```java
+int idxVar = start;
+while (idxVar < end) {
+  ...body...
+  idxVar = idxVar + 1;
+}
+```
+
+Consider the following mathematical function, defined on positive integers:
+𝑓(𝑛)={
+𝑛/2  when 𝑛 is even
+3𝑛+1 when 𝑛 is odd
+}
+
+or any given number, say 9, compute 𝑓(9), 𝑓(𝑓(9)), etc. The puzzle is this: Will this process always reach 1 for every value of 𝑛? In this example.
+
+```java
+// In some Utils class
+boolean getsToOne(int n) {
+  while (n > 1) {
+    if (n % 2 == 0) {
+      n = n / 2;
+    }
+    else {
+      n = 3 * n + 1;
+    }
+  }
+  return true;
+}
+```
+
+24.1.3 Big-bang
+
+How does the big-bang library work? Conceptually, it takes an initial world and invokes the makeImage method to create an image from it, then invokes the onTick method to get the next work, and then repeats these two steps until the worldEnds method returns true. This sounds like looping behavior, but it cannot possibly be a counted-for loop, since the game can last an indefinite amount of time, and we’re not counting any particular index, but rather updating a world from one value to the next. This is a perfect use of a while loop. In fact, this style of using a while loop to repeatedly handle events (such as keypresses or mouse clicks) is at the core of almost every operating system, browser, game console, or other system that deals with interactivity.
+
+24.2 Discussion
+When should we use each of these three loop types? After all, if every for-each loop over ArrayLists can be rewritten to use a counted-for loop, and every counted-for loop can be rewritten to use while loops, why bother with the other two loops?
+
+To a large extent, this is an aesthetic choice, and programmers largely have come to consensus on when it is appropriate to use each of these loops. The shortest guideline is, “use the simplest form loop that works”. If a problem can be expressed as a computation over the particular items of an ArrayList, use a for-each loop. If the problem requires specifically manipulating indices, or counting for whatever reason, use a counted-for loop. If the number of iterations of the loop is not known a priori, use a while loop.
+
+Additionally, as we will see in the next lecture, for-each loops are in fact more general than just working with ArrayLists, and we will encounter additional reasons to use them.
