@@ -1984,3 +1984,98 @@ that takes an input ArrayList and produces a new list containing the first, thir
     return minSoFar;
 }
 ```
+
+## Lecture 23: For-each loops and Counted-for loops
+
+Comparing and contrasting for-each loops and counted-for loops; a note about aliasing, parameters, and local variables
+
+23.1 Warmup: build-list
+
+Suppose we want to implement a method akin to Racket’s build-list function: it should take a number 𝑛 and a function object, and produce an ArrayList that results from invoking that function object on all numbers from 0 to 𝑛−1.
+
+```java
+// In ArrayUtils
+// Returns an ArrayList of size n, where the ith element is f(i)
+<U> ArrayList<U> buildList(int n, IFunc<Integer, U> func) {
+  ArrayList<U> result = new ArrayList<U>();
+  for (int i = 0; i < n; i = i + 1) {
+    result.add(func.apply(i));
+  }
+  return result;
+}
+```
+
+```java
+(Note how similar this code is to our implementation of map:
+// In ArrayUtils
+<T, U> ArrayList<U> map(ArrayList<T> arr, IFunc<T, U> func) {
+  ArrayList<U> result = new ArrayList<U>();
+  for (T t : arr) {
+    result.add(func.apply(t));
+  }
+  return result;
+}
+```
+
+Why use counted-for loops instead of for-each loops?
+
+23.2 Loops, Aliasing and Variables
+
+First, let’s consider modifying each book in the array-list so that its title is entirely in uppercase letters. We’ll want to use the toUpperCase() method on Strings to accomplish this.
+
+```java
+// In ArrayUtils
+// EFFECT: Modifies all the books in the given ArrayList, to capitalize their titles
+void capitalizeTitles_bad(ArrayList<Book> books) {
+  for (Book b : books) {
+    b = new Book(b.title.toUpperCase(), b.author);
+  }
+}
+```
+
+What goes wrong with this approach? 
+
+The problem is that the variable b is an alias for the element of the ArrayList. When we assign b to a new Book, we’re not modifying the element of the ArrayList; we’re just changing the value of the local variable b. The element of the ArrayList is still the same old Book, with the same old title.
+
+The good solution would be using delegation:
+
+```java
+// In ArrayUtils
+// EFFECT: Modifies all the books in the given ArrayList, to capitalize their titles
+void capitalizeTitles_good(ArrayList<Book> books) {
+  for (Book b : books) {
+    b.capitalizeTitle();
+  }
+}
+ 
+// In Book
+// EFFECT: Capitalizes this book's title
+void capitalizeTitle() {
+  this.title = this.title.toUpperCase();
+}
+```
+
+The moral of this example is a subtle but important lesson in the differences between `references` and `variables`: when we “pass a variable to a method”, we actually do no such thing at all! Instead, we pass the value of that variable to the method, and that value just might be a reference to an object. If so, inside the method we bind that reference to the parameter of the method, and obtain an alias to the original object, completely independent of the reference that was in the original variable.
+
+23.3 Adding and removing items from lists
+
+Above we claimed that trying to remove an item from an ArrayList and add a new one, while iterating over that list, is a dangerous idea.
+
+Bu here is another implementation of capitalizeTitles, which does not use delegation, but instead `insert` method to replace the new book with the title capitalized.
+
+```java
+// In ArrayUtils
+// EFFECT: Modifies all the books in the given ArrayList, to capitalize their titles
+void capitalizeTitles_ok(ArrayList<Book> books) {
+  for (int i = 0; i < books.size(); i = i + 1) {
+    // get the old book...
+    Book oldB = books.get(i);
+    // ... construct the new book ...
+    Book newB = new Book(oldB.title.toUpperCase(), oldB.author);
+    // and set it in place of the old book, at the current index
+    books.set(i, newB);
+  }
+}
+```
+
+Because we are counting indices, rather than iterating over the contents of the ArrayList directly, we are manually managing the details of which item is “next”, rather than letting the for-each loop manage that for us.
