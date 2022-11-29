@@ -2132,8 +2132,68 @@ boolean getsToOne(int n) {
 How does the big-bang library work? Conceptually, it takes an initial world and invokes the makeImage method to create an image from it, then invokes the onTick method to get the next work, and then repeats these two steps until the worldEnds method returns true. This sounds like looping behavior, but it cannot possibly be a counted-for loop, since the game can last an indefinite amount of time, and we’re not counting any particular index, but rather updating a world from one value to the next. This is a perfect use of a while loop. In fact, this style of using a while loop to repeatedly handle events (such as keypresses or mouse clicks) is at the core of almost every operating system, browser, game console, or other system that deals with interactivity.
 
 24.2 Discussion
+
 When should we use each of these three loop types? After all, if every for-each loop over ArrayLists can be rewritten to use a counted-for loop, and every counted-for loop can be rewritten to use while loops, why bother with the other two loops?
 
 To a large extent, this is an aesthetic choice, and programmers largely have come to consensus on when it is appropriate to use each of these loops. The shortest guideline is, “use the simplest form loop that works”. If a problem can be expressed as a computation over the particular items of an ArrayList, use a for-each loop. If the problem requires specifically manipulating indices, or counting for whatever reason, use a counted-for loop. If the number of iterations of the loop is not known a priori, use a while loop.
 
 Additionally, as we will see in the next lecture, for-each loops are in fact more general than just working with ArrayLists, and we will encounter additional reasons to use them.
+
+## Lecture 25: Iterator and Iterable
+
+How does a for-each loop actually work?
+
+We’ve discussed how the three loop forms in Java work to repeatedly execute some computation either:
+- once for each item in an ArrayList, 
+- once for every value of an integer variable as it counts
+- or simply indefinitely many times while some condition remains true.
+
+But for-each loops seem to only work on ArrayLists. What makes ArrayList so special that it deserves its own special syntax in the language? No other class we have seen gets such special treatment!
+
+In fact, ArrayList is not special, and does not get its own syntax.
+
+Instead, it is simply one particular example of a far more general notion, one that we can take advantage of for our own classes, too.
+
+25.1 How do for-each loops actually work?
+
+A for-each loop looks like this:
+
+```java
+for (T t : tList) {
+  ...body...
+}
+```
+
+25.1.1 Introducing Iterators
+
+The while loop sketch above will work with any object that exposes these two functions as methods. This is a promise to provide a certain set of behaviors, so we should accordingly define a new interface. This interface is called an Iterator, and it is provided for us by Java itself. Its methods are slightly renamed from the sketch above:
+According to our naming conventions, it really ought to be called IIterator, but that’s a clumsy name. At least it does start with a capital I!
+
+
+```java
+// Represents the ability to produce a sequence of values
+// of type T, one at a time
+interface Iterator<T> {
+  // Does this sequence have at least one more value?
+  boolean hasNext();
+  // Get the next value in this sequence
+  // EFFECT: Advance the iterator to the subsequent value
+  T next();
+  // EFFECT: Remove the item just returned by next()
+  // NOTE: This method may not be supported by every iterator; ignore it for now
+  void remove();
+}
+```
+
+We can refine our while loop sketch above as follows:
+
+```java
+// Second attempt
+Iterator<T> listIter = new ArrayListIterator<T>(tList);
+while (listIter.hasNext()) {
+  T t = listIter.next();
+  ...body...
+}
+```
+
+25.1.2 Introducing Iterables
