@@ -2197,3 +2197,39 @@ while (listIter.hasNext()) {
 ```
 
 25.1.2 Introducing Iterables
+
+Let’s say that an object is iterable if there exists some Iterator implementation for it. That sounds like another interface, which is also defined for us by Java:
+
+```java
+// Represents anything that can be iterated over
+interface Iterable<T> {
+  // Returns an iterator over this collection
+  Iterator<T> iterator();
+}
+```
+
+In the actual Java implementation of ArrayList, we see something like this:
+
+```java
+class ArrayList<T> implements Iterable<T> {
+  ... lots of other details ...
+  //
+  public Iterator<T> iterator() {
+    return new ArrayListIterator<T>(this);
+  }
+}
+```
+
+25.2 Examples of Iterators for different data types
+
+25.2.1 Iterators for ArrayLists — counting indices
+
+25.2.2 Iterators for ILists — following links
+
+25.2.3 Iteration in multiple directions
+
+25.2.4 Iterators for Fibonacci numbers — computing items on demand
+
+25.2.5 Higher-order Iterators
+
+25.2.6 Iterators over tree-shaped data
