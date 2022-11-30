@@ -7,6 +7,9 @@
 - Delegation
 - Helper functions
 - Function Objects
+- Higher-order functions
+- Recursion
+- Lambda expressions
 - Field of a field access(not allowed)
 - Accumulators for recursive algorithms
 - How to use interfaces to create `Predicates`, `Comparators` and `IFuncs` so we can see how to refactor `Generic` Lists to have `filter`, `sort`, `map` and `foldr`(reduce).

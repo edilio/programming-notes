@@ -787,13 +787,13 @@ To use it:
 IRunnerPredicate pre = new AndPredicate(new RunnerIsMale(), new FinishIn4Hours())
 ```
 
-It should be pretty easy create an or predicate:
+It should be pretty easy create an or predicate too:
 
 ```java
 // Represents a predicate that is true whenever one of its component predicates is true
-class AndPredicate implements IRunnerPredicate {
+class OrPredicate implements IRunnerPredicate {
   IRunnerPredicate left, right;
-  AndPredicate(IRunnerPredicate left, IRunnerPredicate right) {
+  OrPredicate(IRunnerPredicate left, IRunnerPredicate right) {
     this.left = left;
     this.right = right;
   }
@@ -876,7 +876,7 @@ marathon.sortBy(new CompareByTime())
 
 14.2 Three-valued comparisons
 
-Instead of `comesBefore` returning a boolean, we want to change ti to an integer so we can also know if they are tie.
+Instead of `comesBefore` returning a boolean, we want to change it to an integer so we can also know if they are tie.
 
 ```java
 // To compute a three-way comparison between two Runners
@@ -2208,7 +2208,7 @@ interface Iterable<T> {
 }
 ```
 
-In the actual Java implementation of ArrayList, we see something like this:
+In the actual Java implementation of `ArrayList`, we see something like this:
 
 ```java
 class ArrayList<T> implements Iterable<T> {
@@ -2224,12 +2224,199 @@ class ArrayList<T> implements Iterable<T> {
 
 25.2.1 Iterators for ArrayLists — counting indices
 
-25.2.2 Iterators for ILists — following links
+```java
+class ArrayListIterator<T> implements Iterator<T> {
+  // the list of items that this iterator iterates over
+  ArrayList<T> items;
+  // the index of the next item to be returned
+  int nextIdx;
+  // Construct an iterator for a given ArrayList
+  ArrayListIterator(ArrayList<T> items) {
+    this.items = items;
+    this.nextIdx = 0;
+  }
+ 
+  // Does this sequence (of items in the array list) have at least one more value?
+  public boolean hasNext() {
+    return this.nextIdx < this.items.size();
+  }
+ 
+  // Get the next value in this sequence
+  // EFFECT: Advance the iterator to the subsequent value
+  public T next() {
+    if (!this.hasNext()) {  // defensively check whether any elements remain
+      throw new NoSuchElementException(); // and fail if there aren't any
+    }
+    T answer = this.items.get(this.nextIdx);
+    this.nextIdx = this.nextIdx + 1;
+    return answer;
+  }
+ 
+  public void remove() {
+    throw new UnsupportedOperationException("Don't do this!");
+  }
+}
+```
+
+25.2.2 Iterators for ILists(Self-Referential) — following links
+
+```java
+class IListIterator<T> implements Iterator<T> {
+  IList<T> items;
+  IListIterator(IList<T> items) {
+    this.items = items;
+  }
+  public boolean hasNext() {
+    return this.items.isCons();
+  }
+  public T next() {
+    if (!this.hasNext()) {  // defensively check whether any elements remain
+      throw new NoSuchElementException(); // and fail if there aren't any
+    }
+    ConsList<T> itemsAsCons = this.items.asCons();
+    T answer = itemsAsCons.first;
+    this.items = itemsAsCons.rest;
+    return answer;
+  }
+  public void remove() {
+    throw new UnsupportedOperationException("Don't do this!");
+  }
+}
+```
+
+### Define the isCons() and asCons() methods to complete this code.
+
+Note: Yes, isCons and asCons aren’t great methods from an object-oriented standpoint. We know that double-dispatch would be a better design here. In this case, double-dispatch is overkill, as we’d need two visitor classes — one to implement isCons and one for asCons — which seems painfully heavyweight.
+
+We can make our ILists be Iterable, too:
+
+```java
+// Declare that every IList is an Iterable:
+interface IList<T> extends Iterable<T> {
+  ... everything as before ...
+}
+class ConsList<T> implements IList<T> {
+  ... everything as before ...
+  public Iterator<T> iterator() {
+    return new IListIterator<T>(this);
+  }
+}
+class MtList<T> implements IList<T> {
+  ... everything as before ...
+  public Iterator<T> iterator() {
+    return new IListIterator<T>(this);
+  }
+  
+```
+
+And with those last few definitions, we can now use ILists in `for-each` loops, exactly as we could with `ArrayLists`.
+
+```java
+for (T item : myList) {
+  // iterates forward through myList
+  ...
+}
+```
 
 25.2.3 Iteration in multiple directions
 
+Some data structures can meaningfully support iteration in multiple orders. However, if we choose to make those data structures Iterable, then we have to choose a default iteration order to be used with for-each loops, and construct that particular iterator in the iterator() method. For Deques, we probably would choose the forward iteration direction, as it is the “most natural”. If we want to use the reverse iterator, we’d have to explicitly write the while-loop version ourselves
+
+Note, if we create an iterator in other direction we should use the while loop version in order to iterate over all data in that specific direction.
+
+```java
+Iterator<T> revIter = myDeque.reverseIterator();
+while (revIter.hasNext()) {
+  // iterates backward through myDeque
+  T item = revIter.next();
+  ...
+}
+```
+
 25.2.4 Iterators for Fibonacci numbers — computing items on demand
+
+Not every iterator needs to store an actual object from which it derives its data. Iterators simply represent sequences of values, and those values might just be computed on demand. Consider the following iterator for calculating Fibonacci numbers:
+
+```java
+class FibonacciIterator implements Iterator<Integer> {
+  int prevVal = 0;
+  int curVal = 1;
+  // There are always more Fibonacci numbers
+  boolean hasNext() { return true; }
+  // Compute the next Fibonacci number
+  Integer next() {
+    int answer = this.prevVal + this.curVal;
+    this.prevVal = this.curVal;
+    this.curVal = answer;
+    return answer;
+  }
+  public void remove() {
+    throw new UnsupportedOperationException("Don't do this!");
+  }
+}
+```
+
+Other sequences could be prime numbers, or powers of 2, or any other sequence that can be computed on demand.
 
 25.2.5 Higher-order Iterators
 
+Given an iterator we can create a new iterator that iterates over the results of applying a given function to each item in the original iterator. This is called a higher-order iterator.
+
+Also, we can skip some items in the original iterator by using a higher-order iterator.
+
+```java
+// Represents the subsequence of the first, third, fifth, etc. items from a given sequence
+class EveryOtherIter<T> implements Iterator<T> {
+  Iterator<T> source;
+  EveryOtherIter(Iterator<T> source) {
+    this.source = source;
+  }
+  public boolean hasNext() {
+    // this sequence has a next item if the source does
+    return this.source.hasNext();
+  }
+  public T next() {
+    if (!this.hasNext()) {  // defensively check whether any elements remain
+      throw new NoSuchElementException(); // and fail if there aren't any
+    }
+    T answer = this.source.next(); // gets the answer, and advances the source
+    // We need to have the source "skip" the next value
+    if (this.source.hasNext() {
+      this.source.next(); // get the next value and ignore it
+    }
+    return answer;
+  }
+  public void remove() {
+    // We can remove an item if our source can remove the item
+    this.source.remove(); // so just delegate to the source
+  }
+}
+```
+
 25.2.6 Iterators over tree-shaped data
+
+We can even define iterators over tree-shaped data. Let’s consider binary trees. There are many plausible orders for traversing a tree. For the following example tree (with data at the nodes, and nothing at the leaves):
+```
+      A
+     / \
+    /   \
+   B     C
+  / \   / \
+ D   E F   G
+/ \ /\/\  / \
+```
+
+we have (at least) the following standard orders:
+- A breadth-first traversal, which walks through each level of the tree from top to bottom, left to right:
+A, B, C, D, E, F, G
+
+- A post-order traversal, which recursively produces all the children of a node before producing the node itself:
+D, E, B, F, G, C, A
+
+- An in-order traversal, which recursively produces the left subtree of a node, then the node, then recursively produces the right subtree:
+D, B, E, A, F, C, G
+
+- A pre-order traversal (or a depth-first traversal), which produces the node, then recursively produces the left subtree of the node, then the right subtree:
+A, B, D, E, C, F, G
+
+We can create iterators for each of these orders.
