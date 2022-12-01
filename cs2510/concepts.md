@@ -35,7 +35,7 @@
 
 - Lists
 - Trees
-- Deques
+- Deques(double-ended queues, allow insertion and deletion at both ends)
 
 # Algorithms
 - Binary Search

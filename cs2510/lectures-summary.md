@@ -2545,3 +2545,85 @@ class Author {
 ```
 
 26.5.2 Defining custom equals methods for simple classes
+
+The equals method is ultimately inherited from the Object class. Accordingly, the signature for equals must work for any object at all (unlike our sameBook or sameShape methods), so it looks like
+
+```java
+public boolean equals(Object other);
+```
+
+If we want to override the default behavior of equals, then we must implement exactly this signature. But because the type of other is merely Object, we don’t know anything about it, and so cannot make progress. We will need to cast from Object to the particular class we are in. This is the one and only valid use of instanceof and casting in this entire course! It is both sufficient to let us implement our equality method, and necessary because the types are otherwise uninformative.
+
+Here are properly-implemented custom equality methods for `Book` and `Author`:
+
+```java
+class Book {
+  Author author;
+  String title;
+  int year;
+  public boolean equals(Object other) {
+    if (!(other instanceof Book)) { return false; }
+    // this cast is safe, because we just checked instanceof
+    Book that = (Book)other;
+    return this.author.equals(that.author)
+        && this.year == that.year
+        && this.title.equals(that.title);
+  }
+
+}
+
+class Author {
+  Book book;
+  String name;
+  int yob;
+  public boolean equals(Object other) {
+    if (!(other instanceof Author)) { return false; }
+    // this cast is safe, because we just checked instanceof
+    Author that = (Author)other;
+    return this.name.equals(that.name)
+        && this.yob == that.yob;
+  }
+}
+```
+
+6.5.3 Defining custom equals methods for itemizations(when inheritance is involved)
+
+We want to define customized equality testing for itemizations, we obviously can’t throw away the hard-won correct behavior of our sameness-testing methods from Lecture 12.
+
+The solution in this case is a “hybrid” of the code above and the double-dispatch technique of Lecture 12.
+
+```java
+interface IShape {
+  boolean sameShape(IShape that);
+  boolean sameCircle(Circle that);
+  boolean sameSquare(Square that);
+  boolean sameRect(Rect that);
+}
+abstract class AShape implements IShape {
+  public boolean sameCircle(Circle that) { return false; }
+  public boolean sameSquare(Square that) { return false; }
+  public boolean sameRect(Rect that)     { return false; }
+}
+class Circle extends AShape {
+  int radius;
+  Circle(int radius) { this.radius = radius; }
+  public boolean sameShape(IShape that) { return that.sameCircle(this); }
+  public boolean sameCircle(Circle that) { return that.radius == this.radius; }
+}
+```
+
+All we need to do is override equals on the AShape base class, as follows:
+
+```java
+// In AShape
+public boolean equals(Object other) {
+  if (!other instanceof IShape) { return false; }
+  // this cast is safe, because we just checked instanceof
+  IShape that = (IShape)other;
+  return this.sameShape(that);
+}
+```
+
+Now any `Circle`, `Square` or `Rect` object will inherit its equals method from `AShape`, and that method first checks that the other object is at least an IShape (or else it’s definitely not equal to this object!), and then casts down to IShape and delegates to the sameShape method, which implements the double-dispatch technique for sameness testing that we worked out already.
+
+Now that we’ve overridden equals, our shape classes have violated an important principle. What principle is it? Fix it!
