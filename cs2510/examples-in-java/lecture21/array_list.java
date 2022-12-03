@@ -13,6 +13,11 @@ interface IPred<T> {
     boolean apply(T t);
 }
 
+interface IComparator<T> {
+    int compare(T t1, T t2);
+}
+
+
 class ArrayUtils {
     // Returns a new array containing the elements of the given array
     <T> void swap(ArrayList<T> arr, int index1, int index2) {
@@ -55,6 +60,22 @@ class ArrayUtils {
             result = func.apply(t, result);
         }
         return result;
+    }
+
+    <T> int findMin(ArrayList<T> arr, IComparator<T> comparator) {
+        if (arr.size() == 0) {
+            throw new RuntimeException("Cannot find the minimum of an empty list");
+        }
+        T min = arr.get(0);
+        int minIdx = 0;
+        for (int i = 1; i < arr.size(); i++) {
+            T current = arr.get(i);
+            if (comparator.compare(current, min) < 0) {
+                min = current;
+                minIdx = i;
+            }
+        }
+        return minIdx;
     }
 }
 
@@ -108,5 +129,18 @@ class ExampleArrayUtils {
         }, 0);
 
         t.checkExpect(result, 15);
+    }
+
+    void testFindMin(Tester t) {
+        ArrayList<Integer> arr = this.initData();
+
+        ArrayUtils utils = new ArrayUtils();
+        int result = utils.findMin(arr, new IComparator<Integer>() {
+            public int compare(Integer t1, Integer t2) {
+                return t1 - t2;
+            }
+        });
+
+        t.checkExpect(result, 0);
     }
 }
