@@ -1551,6 +1551,17 @@ Aliasing: two different names for the same object. In Java, this is done by assi
 
 19.5 Aliasing, mutation and equality: two notions of equality
 
+- Extensional equality: two items are `extensionally` equal if their fields are the same: either they’re equal primitive values, or they’re objects that are themselves extensionally equal.
+
+- Intensional equality: two items are `intensionally` equal if they are the exact same object.
+
+A helpful mnemonic: extensional equality is when two items have the same extent or shape, while intensional equality is only for identical objects.
+
+So far, every time we define a sameness method (sameShape, sameList, samePerson, etc.), it has been a test of extensional equality, because we recur down the shape, checking that all fields are the same.
+
+If we truly want to check intensional equality, we can use Java’s == operator
+
+
 They show some other examples of aliasing.
 
 ## Lecture 20: Mutable data structures
