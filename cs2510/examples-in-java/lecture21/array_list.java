@@ -77,6 +77,14 @@ class ArrayUtils {
         }
         return minIdx;
     }
+
+    void sort(ArrayList<Integer> arr, IComparator<Integer> comparator) {
+
+        for (int i = 0; i < arr.size() - 1; i++) {
+            int minIdx = this.findMin(arr, comparator);
+            this.swap(arr, i, minIdx);
+        }
+    }
 }
 
 
@@ -142,5 +150,22 @@ class ExampleArrayUtils {
         });
 
         t.checkExpect(result, 0);
+    }
+
+    void testSort(Tester t) {
+        ArrayList<Integer> arr = this.initData();
+
+        ArrayUtils utils = new ArrayUtils();
+        utils.sort(arr, new IComparator<Integer>() {
+            public int compare(Integer t1, Integer t2) {
+                return t1 - t2;
+            }
+        });
+
+        t.checkExpect(arr.get(0), 1);
+        t.checkExpect(arr.get(1), 2);
+        t.checkExpect(arr.get(2), 3);
+        t.checkExpect(arr.get(3), 4);
+        t.checkExpect(arr.get(4), 5);
     }
 }
