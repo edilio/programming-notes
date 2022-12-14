@@ -33,8 +33,8 @@
 
 # Data Structures
 
-- Lists
-- Trees
+- Lists(IList, ArrayList)
+- Trees(BinaryTrees, BinarySearchTree)
 - Deques(double-ended queues, allow insertion and deletion at both ends)
 
 # Algorithms
@@ -43,3 +43,14 @@
 - Map
 - Filter
 - Sort(insertion sort, merge sort, quick sort)
+
+# Summary done by the teachers(lecture 27)
+The data structures they introduced served a via to talk about `interfaces` and `linked lists`,
+`indexed data structures`, `branching structures`, and `wrappers and sentinels`. 
+
+They have also implemented many of the same algorithms for each data structure: 
+- inserting items
+- sorting items
+- finding items
+- mapping over items
+- etc.
