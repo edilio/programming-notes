@@ -76,6 +76,75 @@ class ShoppingCart:
             print(item)
 ```
 
+## Observer Pattern
+
+The Observer pattern can be useful for cases where you want to notify multiple parties about changes to an object, such as updates to a product's availability or price. For example, you might use the Observer pattern to implement a notification system that sends email updates to customers when a product they are interested in becomes available, or to update the display of a product's availability on the website in real-time.
+
+Here's an example of how you might use the Observer pattern in an e-commerce application:
+
+- Define an interface for the observer (e.g. `Observer`, `Subscriber`).
+- Create concrete implementations of the observer for each type of notification you want to support (e.g. `EmailSubscriber`, `SMSSubscriber`, `WebhookSubscriber`).
+- Define a class for the subject (e.g. `Product`, `Inventory`) and give it methods for attaching and detaching observers, and for notifying observers when its state changes (e.g. attach, detach, notify).
+- In your e-commerce application, create instances of the subject and observer classes and attach the observers to the subject using the appropriate method.
+- When the state of the subject changes, call the notify method to update the observers.
+
+Here's an example of how you might implement the Observer pattern in Python:
+
+```python
+from abc import ABC, abstractmethod
+
+class Observer(ABC):
+    @abstractmethod
+    def update(self, subject):
+        pass
+
+class EmailSubscriber(Observer):
+    def __init__(self, email):
+        self.email = email
+        
+    def update(self, subject):
+        print(f'Sending email to {self.email} about {subject.name}')
+
+class SMSSubscriber(Observer):
+    def __init__(self, phone_number):
+        self.phone_number = phone_number
+        
+    def update(self, subject):
+        print(f'Sending SMS to {self.phone_number} about {subject.name}')
+
+class WebhookSubscriber(Observer):
+    def __init__(self, url):
+        self.url = url
+        
+    def update(self, subject):
+        print(f'Sending webhook to {self.url} about {subject.name}')
+
+class Subject:
+    def __init__(self):
+        self.observers = []
+        self.name = None
+        
+    def attach(self, observer):
+        self.observers.append(observer)
+        
+    def detach(self, observer):
+        self.observers.remove(observer)
+        
+    def notify(self):
+        for observer in self.observers:
+            observer.update(self)
+
+class Product(Subject):
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+        
+    def set_name(self, name):
+        self.name = name
+        self.notify()
+```
+
+You could also use the Observer pattern to implement an event source inventory system in order to create different projections of the inventory. For example, you might want to create a projection of the inventory that is optimized for querying the availability of a product, and another projection that is optimized for querying the price of a product. You could use the Observer pattern to implement this system by creating a subject class for the inventory and an observer class for each projection.
 
 ## Memento Pattern?
 
