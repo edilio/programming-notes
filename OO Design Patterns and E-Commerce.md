@@ -1,10 +1,10 @@
-# How we can use OO Design Patterns to implement E-Commerce
+# How we can use OO Design Patterns to implement an E-Commerce application
 
 ## Strategy Pattern
 
-The Strategy pattern can be useful for cases where you need to vary the behavior of a system based on different business rules or policies. For example, you might use the Strategy pattern to implement different pricing strategies for different products or to handle shipping in different ways for different regions.
+The `Strategy` pattern can be useful for cases where you need to vary the behavior of a system based on different business rules or policies. For example, you might use the `Strategy` pattern to implement different pricing strategies for different products or to handle shipping in different ways for different regions.
 
-Here's an example of how you might use the Strategy pattern in an e-commerce application:
+Here's an example of how you might use the `Strategy` pattern in an e-commerce application:
 
 - Define an interface for the algorithm you want to implement (e.g. `PricingStrategy`, `ShippingStrategy`).
 - Create concrete implementations of the algorithm for each variation you want to support (e.g. `DiscountPricingStrategy`, `StandardPricingStrategy`, `LocalShippingStrategy`, `InternationalShippingStrategy`).
@@ -20,7 +20,7 @@ You can also use the `Strategy` design pattern to handle different payment metho
 
 ## Command Pattern
 
-Command pattern can be useful for cases where you want to decouple the object that invokes an operation (the client) from the object that performs the operation (the receiver). For example, you might use the Command pattern to implement a shopping cart that allows a user to add, remove, and view the items in their cart, or to implement an order system that allows an administrator to cancel, modify, or view orders.
+`Command` pattern can be useful for cases where you want to decouple the object that invokes an operation (the client) from the object that performs the operation (the receiver). For example, you might use the `Command` pattern to implement a shopping cart that allows a user to add, remove, and view the items in their cart, or to implement an order system that allows an administrator to cancel, modify, or view orders.
 
 Here's an example of how you might use the `Command` pattern in an e-commerce application:
 
@@ -78,9 +78,9 @@ class ShoppingCart:
 
 ## Observer Pattern
 
-The Observer pattern can be useful for cases where you want to notify multiple parties about changes to an object, such as updates to a product's availability or price. For example, you might use the Observer pattern to implement a notification system that sends email updates to customers when a product they are interested in becomes available, or to update the display of a product's availability on the website in real-time.
+The `Observer` pattern can be useful for cases where you want to notify multiple parties about changes to an object, such as updates to a product's availability or price. For example, you might use the `Observer` pattern to implement a notification system that sends email updates to customers when a product they are interested in becomes available, or to update the display of a product's availability on the website in real-time.
 
-Here's an example of how you might use the Observer pattern in an e-commerce application:
+Here's an example of how you might use the `Observer` pattern in an e-commerce application:
 
 - Define an interface for the observer (e.g. `Observer`, `Subscriber`).
 - Create concrete implementations of the observer for each type of notification you want to support (e.g. `EmailSubscriber`, `SMSSubscriber`, `WebhookSubscriber`).
@@ -144,18 +144,18 @@ class Product(Subject):
         self.notify()
 ```
 
-You could also use the Observer pattern to implement an event source inventory system in order to create different projections of the inventory. For example, you might want to create a projection of the inventory that is optimized for querying the availability of a product, and another projection that is optimized for querying the price of a product. You could use the Observer pattern to implement this system by creating a subject class for the inventory and an observer class for each projection.
+You could also use the `Observer` pattern to implement an event source inventory system in order to create different projections of the inventory. For example, you might want to create a projection of the inventory that is optimized for querying the availability of a product, and another projection that is optimized for querying the price of a product. You could use the Observer pattern to implement this system by creating a subject class for the inventory and an observer class for each projection.
 
 ## Memento Pattern?
 
-Here's an example of how you might use the Memento pattern in an e-commerce application:
+Here's an example of how you might use the `Memento` pattern in an e-commerce application:
 
 The user adds a product to their shopping cart.
-- The system creates a Memento object that captures the state of the shopping cart before the product was added.
-- If the user decides to remove the product from their cart, the system can use the Memento object to restore the cart to its previous state.
-- To implement the Memento pattern, you'll need to define a Memento class that captures the internal state of the object you want to store. You'll also need to define a Caretaker class that is responsible for managing the Memento objects.
+- The system creates a `Memento` object that captures the state of the shopping cart before the product was added.
+- If the user decides to remove the product from their cart, the system can use the `Memento` object to restore the cart to its previous state.
+- To implement the `Memento` pattern, you'll need to define a `Memento` class that captures the internal state of the object you want to store. You'll also need to define a `Caretaker` class that is responsible for managing the `Memento` objects.
 
-Here's an example of how you might implement the `Memento` and `Caretaker` classes in Python:
+Here's an example of how you might implement the `Memento` and `Caretaker` classes in `Python`:
     
 ```python
 class Memento:
@@ -174,3 +174,32 @@ class Caretaker:
 ```
 
 To use the `Memento` and `Caretaker` classes in your e-commerce application, you would first create an instance of the `Caretaker` class. Then, whenever a user performs an action that you want to allow them to undo, you would create a new `Memento` object and pass it to the `Caretaker` using the `add_memento` method. To revert to a previous state, you can retrieve the appropriate `Memento` object using the `get_memento` method and use it to restore the state of the relevant object.
+
+
+## State Pattern
+
+The `State` pattern can be useful for cases where you want to change the behavior of an object based on its internal state. For example, you might use the `State` pattern to implement a checkout process that behaves differently depending on whether the user is logged in or not.
+
+## Proxy Pattern
+
+The `Proxy` pattern can be useful for cases where you want to add additional functionality to an existing object without modifying the object itself. For example, you might use the `Proxy` pattern to implement a caching system that stores the results of expensive operations so that they can be retrieved quickly the next time they are needed.
+
+Also, the `Proxy` pattern can be useful for cases where you want to control access to an object. For example, you might use the `Proxy` pattern to implement a system that allows users to access a product's details only if they are logged in.
+
+However, I think it will also be useful to get a live inventory from suppliers. For example, if a product is out of stock, you might want to check with the supplier to see if they have any in stock. You could use the `Proxy` pattern to implement this system by creating a proxy class that acts as an interface to the supplier's inventory system.
+
+## Decorator Pattern
+
+The `Decorator` pattern can be useful for cases where you want to add additional functionality to a product or service, such as adding gift wrapping or a personalized message. For example, you might use the `Decorator` pattern to implement a system that allows a customer to add extra features to their order, such as expedited shipping or insurance.
+
+Here's an example of how you might use the `Decorator` pattern in an e-commerce application:
+
+- Define an interface for the decorator (e.g. `Decorator`, `Enhancement`).
+- Create concrete implementations of the decorator for each type of enhancement you want to offer (e.g. `GiftWrappingDecorator`, `PersonalizedMessageDecorator`, `ExpeditedShippingDecorator`, `InsuranceDecorator`).
+- Define a base class for the object you want to enhance (e.g. `Product`, `Service`) and implement the interface defined in step 1.
+- In your e-commerce application, create instances of the decorator and base class and use the decorator to wrap the base class object.
+- To add a particular enhancement to an object, create an instance of the desired decorator and pass it the object you want to enhance as an argument.
+
+## Adapter Pattern
+
+We could use it for `PromoStandards` for the different versions and other APIs like `SageWorld`
