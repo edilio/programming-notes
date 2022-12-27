@@ -84,7 +84,7 @@ Here's an example of how you might use the `Observer` pattern in an e-commerce a
 
 - Define an interface for the observer (e.g. `Observer`, `Subscriber`).
 - Create concrete implementations of the observer for each type of notification you want to support (e.g. `EmailSubscriber`, `SMSSubscriber`, `WebhookSubscriber`).
-- Define a class for the subject (e.g. `Product`, `Inventory`) and give it methods for attaching and detaching observers, and for notifying observers when its state changes (e.g. attach, detach, notify).
+- Define a class for the subject (e.g. `Product`, `Inventory`) and give it methods for attaching and detaching observers, and for notifying observers when its state changes (e.g. `attach`, `detach`, `notify`).
 - In your e-commerce application, create instances of the subject and observer classes and attach the observers to the subject using the appropriate method.
 - When the state of the subject changes, call the notify method to update the observers.
 
@@ -180,6 +180,14 @@ To use the `Memento` and `Caretaker` classes in your e-commerce application, you
 
 The `State` pattern can be useful for cases where you want to change the behavior of an object based on its internal state. For example, you might use the `State` pattern to implement a checkout process that behaves differently depending on whether the user is logged in or not.
 
+State machines are a useful tool for modeling and implementing the behavior of complex systems, including e-commerce systems. Here are some ways you might use state machines in an e-commerce context:
+
+1. Order management: You can use a state machine to model the various states an order can be in (e.g., "pending," "shipped," "delivered," etc.) and the transitions between those states (e.g., an order transitions from "pending" to "shipped" when the shipping label is generated).
+2. Inventory management: You can use a state machine to model the various states an item can be in (e.g., "in stock," "out of stock," "on hold," etc.) and the transitions between those states (e.g., an item transitions from "in stock" to "out of stock" when it is purchased).
+3. Customer accounts: You can use a state machine to model the various states a customer account can be in (e.g., "active," "suspended," "closed," etc.) and the transitions between those states (e.g., an account transitions from "active" to "suspended" when the customer misses a payment).
+
+To implement a state machine in an e-commerce system, you can use a library or framework that provides support for state machine modeling and execution, such as the Apache Commons State Machine library or the Spring State Machine framework. Alternatively, you can implement a state machine manually using a programming language of your choice.
+
 ## Proxy Pattern
 
 The `Proxy` pattern can be useful for cases where you want to add additional functionality to an existing object without modifying the object itself. For example, you might use the `Proxy` pattern to implement a caching system that stores the results of expensive operations so that they can be retrieved quickly the next time they are needed.
@@ -203,3 +211,21 @@ Here's an example of how you might use the `Decorator` pattern in an e-commerce 
 ## Adapter Pattern
 
 We could use it for `PromoStandards` for the different versions and other APIs like `SageWorld`
+
+## Builder Pattern
+
+A builder Pattern can be use for creating complex objects like `Order` because an order class has several attributes such as `customer`, `billingA_address`, `shipping_address`, `items`, `etc`.
+You could use a `OrderBuilder` class to construct an `Order` object step by step, as follows:
+
+```python
+OrderBuilder.with_customer(customer).with_billing_address(billing_address).with_shipping_address(shipping_address).with_items(items).build()
+```
+
+This idea is already implemented in `SQlAlchemy` and `Django` ORM.
+
+
+## Template Method Pattern
+
+The `Template Method` pattern can be useful for cases where you want to define the steps of an algorithm without specifying the implementation of those steps. For example, you might use the `Template Method` pattern to implement a system that allows users to create their own product by selecting from a list of available options.
+
+It is already implemented in `Django` and `Django Rest Framework` for `APIView` and `GenericAPIView` classes.

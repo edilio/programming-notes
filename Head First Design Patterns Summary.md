@@ -10,6 +10,15 @@
 - Principle of Least Knowledge - talk only to your immediate friends(Law of Demeter)
 - The Hollywood Principle(Don’t call us, we’ll call you)
 - A class should have only one reason to change
+- Single Responsibility(A class should have only one reason to change)
+
+### Cohesion
+
+It is a term you will her used as a measure of how closely a class or a module supports a single purpose or responsibility.
+
+We say that a module or class has a `high cohesion` when it is designed around a set of related functions, and we say  it has `low cohesion` when it is designed around a set of unrelated functions.
+
+Cohesion is a more general concept than `Single Responsibility Principle`, but the two are closely related. Classes that adhere to the principle tend to have high cohesion and are more maintainable than classes that take on multiple responsibilities and have low cohesion.
 
 ## Chapters
 
