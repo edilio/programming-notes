@@ -2,16 +2,16 @@
 
 ## Lecture 1: Data Definitions in Java
 - Representing Data in java will be using classes
-- Java doesn't java Symbols and Images like Racket.  It has `boolean`, `strings`, `numbers(int, double)`
+- `Java` doesn't java Symbols and Images like Racket.  It has `boolean`, `strings`, `numbers(int, double)`
 - Classes should be title case
 
-Naming convention: class names in Java always are written in `TitleCase`, and field names are always written in `camelCase`. Primitive type names, like int and boolean, are lowercase.
+Naming convention: class names in `Java` always are written in `TitleCase`, and field names are always written in `camelCase`. Primitive type names, like int and boolean, are lowercase.
 
-In Java, we don’t define “struct”s to describe compound data; we define classes.
+In `Java`, we don’t define “struct”s to describe compound data; we define classes.
 
-1.3 Examples of Data(introducing examples data)
+### 1.3 Examples of Data(introducing examples data)
 
-1.4 Anatomy of the Class Definition
+### 1.4 Anatomy of the Class Definition
 (how a class is defined. Note: order matters!)
 
 They also introduce `has a` relationship when a book has an author example(be clear of the diagram representation)
@@ -22,7 +22,7 @@ Code here is Book + Author
 
 Just interfaces to group data functionality
 
-2.1 Unions
+### 2.1 Unions
 
 They introduced also here how to represent that in a diagram(ex. `IStation`/`TStop`/`CommStation`)
 
@@ -57,11 +57,11 @@ class CommStation implements IStation {
 }
 ```
 
-2.2 Defining Examples of Data(just defining examples in the examplesX class)
+### 2.2 Defining Examples of Data(just defining examples in the examplesX class)
 
-2.3 Enter the Tester(introducing the tester library)
+### 2.3 Enter the Tester(introducing the tester library)
 
-2.4 Self-referential unions: Ancestor trees
+### 2.4 Self-referential unions: Ancestor trees
 
 ```java
 interface IAT{ }
@@ -90,7 +90,7 @@ As you can see how to define an interface in order to then, treat the unkown, nu
 
 ## Lecture 3: Methods for simple classes
 
-3.1 Designing methods for simple classes
+### 3.1 Designing methods for simple classes
 methods are like functions but for classes, so they can take parameters like funtions in racket, but also work with fields. They can consume and produce objects too
 
 They come back with the example of books in a book store
@@ -102,7 +102,7 @@ In the process, they introduce the organization:
 - After the constructor comes the template (described in more detail below).
 - After the template comes each method definition for the class.
 
-3.1.1 Signature and purpose
+### 3.1.1 Signature and purpose
 Every method definition consists of the following parts:
 
 - A purpose statement, much as we wrote in Racket, except we will be very careful to use the pronoun this
@@ -111,14 +111,14 @@ Every method definition consists of the following parts:
 - A parenthesized argument list, consisting of the type and name of each argument, separated by commas
 - The method body, surrounded by braces; this is the code to execute when the method is invoked
 
-3.1.2 Template
+### 3.1.2 Template
 
-3.1.3 Method Body
+### 3.1.3 Method Body
 (java uses infix instead of prefix operations like racket)
 
-3.1.4 Tests(the normal checkexpect)
+### 3.1.4 Tests(the normal checkexpect)
 
-3.2 Aside: Evaluation of arithmetic expressions
+### 3.2 Aside: Evaluation of arithmetic expressions
 some words of caution due to integer arithmetic + order of operations
 
 original formula:
@@ -132,9 +132,10 @@ They present other expressions that should be equivalent but fail for using inte
 In particular this one that is the one I use:
 - this.price * (1 - discount / 100) (if discount is int => 30 / 100 = 0 so the whole formula is wrong.)
 
-3.3 Methods for classes with containment: Designing method templates
+### 3.3 Methods for classes with containment: Designing method templates
 
-3.3.1 Signature and purpose
+### 3.3.1 Signature and purpose
+
 ```java
 boolean sameAuthor(Author that) {
     return this.name.equals(that.name) &&
@@ -142,7 +143,7 @@ boolean sameAuthor(Author that) {
 }
 ```
 
-3.4 Methods that produce objects
+### 3.4 Methods that produce objects
 
 They again insist in the template part also.
 
@@ -170,7 +171,7 @@ Book reducePrice() {
 
 ## Lecture 4: Methods for unions
 
-4.1 Designing Methods for Simple Shapes
+### 4.1 Designing Methods for Simple Shapes
 
 ```java
 interface IShape {
@@ -241,25 +242,25 @@ class Square implements IShape {
 }
 ```
 
-4.2 Designing the area method: dynamic dispatch
+### 4.2 Designing the area method: dynamic dispatch
 
-4.3 Dynamic dispatch
+### 4.3 Dynamic dispatch
 
-4.4 Designing the distanceToOrigin method
+### 4.4 Designing the distanceToOrigin method
 
-4.5 What’s so special about Cartesian coordinates, anyway?
+### 4.5 What’s so special about Cartesian coordinates, anyway?
 
-4.6 Designing the isBiggerThan method
+### 4.6 Designing the isBiggerThan method
 
-4.7 Designing the contains method
+### 4.7 Designing the contains method
 
-4.8 Putting it all together: Lots of Examples
+### 4.8 Putting it all together: Lots of Examples
 
 The lecture is based on `Shape` examples. Starting with the simple code shown before, so they can introduce the concepts described;
 
 ## Lecture 5: Methods for self-referential lists(They introduced here the self-referential list(first, rest))
 
-5.1 Representing lists
+### 5.1 Representing lists
 
 ```java
 interface ILoBook {
@@ -337,9 +338,9 @@ class ConsLoBook implements ILoBook {
 }
 ```
 
-5.2 Basic list computations
+### 5.2 Basic list computations
 
-5.3 Sorting(the insertion algorithm just to illustrate the problem of sorting and self-referential algos)
+### 5.3 Sorting(the insertion algorithm just to illustrate the problem of sorting and self-referential algos)
 
 Notes: Check how the code improve when they introduced `publishedBefore` and `cheaperThan`, delegating this responsibility to the `Book` class. It improves readability and testability too.
 
@@ -371,39 +372,40 @@ All the examples are using the ancestor tree(IAT) and the self-referential list
 
 ## Lecture 9: Abstract classes and inheritance(Shapes again)
 
-9.1 Design recipe for abstractions
+### 9.1 Design recipe for abstractions
 
-9.2 Lifting fields
+### 9.2 Lifting fields
 
-9.3 Lifting methods: abstract methods
+### 9.3 Lifting methods: abstract methods
 
-9.4 Concrete methods in the abstract class
+### 9.4 Concrete methods in the abstract class
 
-9.5 Abstraction by defining a subclass()
+### 9.5 Abstraction by defining a subclass()
 
-9.6 Common interface - yes or no(we inherited from an interface, pros/cons)
+### 9.6 Common interface - yes or no(we inherited from an interface, pros/cons)
 
 
 ## Lecture 10: Customizing constructors for correctness and convenience
 
-10.1 Constructors with default options
+### 10.1 Constructors with default options
 
 Interlude 1: invoking one constructor from another(this(...), supper(...))
 
-10.2 Interlude 2: defining constants in Java
+### 10.2 Interlude 2: defining constants in Java
+
 ```java
 interface ITetrisPiece {
   int SCREEN_HEIGHT = 30;
 }
 ```
 
-10.3 Constructors that enforce data integrity: Exceptions
+### 10.3 Constructors that enforce data integrity: Exceptions
 
-10.4 Interlude 3: removing redundancy with a utility class
+### 10.4 Interlude 3: removing redundancy with a utility class
 
-10.5 Testing exceptions in constructors
+### 10.5 Testing exceptions in constructors
 
-10.6 Combining convenience with correctness
+### 10.6 Combining convenience with correctness
 
 ex. 
 ```java 
@@ -432,31 +434,31 @@ This properties must uphold:
 - *Transitivity:* if two objects are both the same as a third object, then they are the same as each other.
 - *Totality:* we can compare any two objects of the same type, and obtain a correct answer.
 
-11.2 Review: sameness for built-in types
+### 11.2 Review: sameness for built-in types
 
 `==` and `.equals()`
 
-11.3 Review: sameness of structured data
+### 11.3 Review: sameness of structured data
 
-11.4 Sameness of union data: Warmup
+### 11.4 Sameness of union data: Warmup
 
 defining `sameCircle`, `sameRectangle` instead of `sameShape`
 
-11.5 Sameness of union data: flawed attempt #1 using “casting” and type-testing
+### 11.5 Sameness of union data: flawed attempt #1 using “casting” and type-testing
 
 - really trying to implement `sameShape`
 
-11.5.1 Casting
+### 11.5.1 Casting
 
-A type cast, or just a cast, is written as ((SomeTypeName)someValue)
+A `type cast`, or just a `cast`, is written as ((SomeTypeName)someValue)
 
-11.5.2 Type-testing using instanceof
+### 11.5.2 Type-testing using instanceof
 
 ## Lecture 12: Defining sameness for complex data, part 2
 
 Using double-dispatch to test for sameness
 
-12.1 Sameness for unions: Successful attempt using double-dispatch
+### 12.1 Sameness for unions: Successful attempt using double-dispatch
 
 ```java
 interface IShape {
@@ -469,7 +471,7 @@ interface IShape {
 
 Every class that implements `IShape` must implement all the methods, but the default implementation of the methods is to return false.
 
-12.2 Summarizing the double-dispatch pattern for sameness testing
+### 12.2 Summarizing the double-dispatch pattern for sameness testing
 
 ```java
 interface IFoo {
@@ -481,7 +483,7 @@ interface IFoo {
 }
 ```
 
-12.3 Cleaning up the code
+### 12.3 Cleaning up the code
 
 Using a class that implements the interface and the default methods
 
@@ -505,7 +507,7 @@ class Z extends AFoo {
 }
 ```
 
-12.4 Adding more variants
+### 12.4 Adding more variants
 
 Now we add a `Combo Shape` and see how easy should be to add a new variant
 
@@ -572,7 +574,7 @@ For today, we are simply going to look at various groups of runners. We’d like
 
 Later we’ll ask more complicated questions, too.
 
-13.1 Warmup: answering the first few questions
+### 13.1 Warmup: answering the first few questions
 
 Add functions to interface and classes.
 
@@ -640,7 +642,7 @@ public ILoRunner findAllFemaleRunners() {
 }
 ```
 
-13.2 Abstracting over behavior: Function objects
+### 13.2 Abstracting over behavior: Function objects
 
 Looking at the definitions above, we can see a lot of repetitive code. Whenever we see such repetition, we know that the design recipe for abstraction tells us to find the parts of the code that differ, find the parts of the code that are the same, and separate the common parts of the code into a single shared implementation. Trying that here, we see the following common pattern:
 
@@ -668,7 +670,7 @@ We want different behaviors for this test but what abstraction can we use?
 - Inheritance won’t help: we don’t want to define subtypes of lists that can each answer just one question, but rather one kind of list that can answer multiple questions.
 - Delegation might help...but how? We’re already delegating to the Runner class, and cluttering its definition with lots of little helpers.
 
-We need `higher-order functions`, where we can pass in the function to do the test on Runners for us. But Java doesn't have functions: it only has `classes` and `methods`.
+We need `higher-order functions`, where we can pass in the function to do the test on Runners for us. But `Java` doesn't have functions: it only has `classes` and `methods`.
 
 Look at the signatures for the helper methods we defined in the Runner class: they all operate on a Runner and produce a boolean. Suppose instead of defining these helper methods as methods on the Runner class, we defined them individually as methods in helper classes. Instead of having this be the Runner, we’ll have these methods take a Runner as a parameter:
 
@@ -761,7 +763,7 @@ And we just used as in the previous example.
 
 We don’t have to modify the `Runner`, `MtLoRunner` and `ConsLoRunner` classes or the `ILoRunner` interface at all!
 
-13.3 Compound questions
+### 13.3 Compound questions
 
 How might we find the list of all female runners younger than 40 who started in the first 50 starting positions? We could continue to define new IRunnerPredicate classes for each of these...but notice that we’ve already answered each of the component questions here. It would be a shame not to be able to reuse their implementations.
 
@@ -805,9 +807,9 @@ class OrPredicate implements IRunnerPredicate {
 
 ## Lecture 14: Abstractions over more than one argument
 
-14.1 Finding the final standings
+### 14.1 Finding the final standings
 
-Similar to Predicates, use Function objects to compare tow objects so they can be used in sorting algorithm.
+Similar to Predicates, use Function objects to compare two objects so they can be used in sorting algorithm.
 
 ```java
 interface ICompareRunners {
@@ -824,13 +826,13 @@ interface ICompareRunners {
 }
 ```
 
-This wy seems very simple to sort by different attributes like age, position, etc.
+This way seems very simple to sort by different attributes like age, position, etc.
 
 Refactoring `ILoRunner`, `MtLoRunner` and `ConsLoRunner` to use the interface.
 
 ```java
 interface ILoRunner {
-  ILoRunner sortBy(ICompareRuners comp);
+  ILoRunner sortBy(ICompareRunners comp);
   ILoRunner insertBy(ICompareRunners comp, Runner r);
 }
 ```
@@ -864,7 +866,8 @@ public ILoRunner insertBy(ICompareRunners comp, Runner r) {
 
 // No more method finishesBefore!
 
-Now, instead of saying 
+Now, instead of saying
+
 ```java
 marathon.sortByTime()
 ```
@@ -874,7 +877,9 @@ marathon.sortByTime()
 marathon.sortBy(new CompareByTime())
 ```
 
-14.2 Three-valued comparisons
+It is simpler and elegant to write `marathon.sortByTime()` but with `sortBy` we can sort by any attribute of the `Runner` class. We just need to define a new class that implements `ICompareRunners` and we can use it.
+
+### 14.2 Three-valued comparisons
 
 Instead of `comesBefore` returning a boolean, we want to change it to an integer so we can also know if they are tie.
 
@@ -925,13 +930,14 @@ class CompareByTime implements IRunnerComparator {
   }
 }
 ```
-14.3 Finding the winner of the race, two ways
+
+### 14.3 Finding the winner of the race, two ways
 
 Show why `marathon.sortBy(new CompareByTime()).first` is not good.
 
 And its variant using the interface is not so good neither.
 
-14.3.1 The smarter way
+### 14.3.1 The smarter way
 
 It seems a wasteful to find the minimum of list, sorting an entire list of Runners and produce an entirely new sorted list, only to take the first item and throw the rest of the list away! If most of that information is unneeded, could we be cleverer and avoid constructing the entire list?
 
@@ -974,7 +980,7 @@ public Runner findMin(IRunnerComparator comp) {
 }
 ```
 
-14.4 Computing the registration roster: sorting alphabetically
+### 14.4 Computing the registration roster: sorting alphabetically
 
 How to sort the marathon alphabetically by name?
 
@@ -992,11 +998,11 @@ So, `marathon.sortBy(new CompareByName())` will do it.
 
 ## Lecture 15: Abstracting over types(Generics)
 
-15.1 The need for more abstraction
+### 15.1 The need for more abstraction
 
 Because we need predicates and comparator for books, and runners, etc we need another abstraction. Generics(abstraction over types)
 
-15.2 Introducing generics
+### 15.2 Introducing generics
 
 The only differences between an IRunnerPredicate and an IBookPredicate are their `names`, and the `type` of the argument supplied to the apply methods:
 
@@ -1018,11 +1024,11 @@ interface IPred<T> {
 }
 ```
 
-Typical Java convention is to use T to be the name of an arbitrary type, and if additional type parameters are needed, they are often named U, V, or S (simply because those letters are near T in the alphabet).
+Typical `Java` convention is to use T to be the name of an arbitrary type, and if additional type parameters are needed, they are often named U, V, or S (simply because those letters are near T in the alphabet).
 
 We read this declaration in words as “the interface IPred of T”. The syntax <T> states that this interface is parameterized by a type, which we will name T within the definition of this interface.
 
-15.3 Implementing generic interfaces: specialization
+### 15.3 Implementing generic interfaces: specialization
 
 ```java
 class BookByAuthor implements IPred<Book> {
@@ -1031,7 +1037,7 @@ class BookByAuthor implements IPred<Book> {
 }
 ```
 
-15.4 Instantiating generic interfaces
+### 15.4 Instantiating generic interfaces
 
 Before it was:
 
@@ -1063,7 +1069,6 @@ interface IList<T> {
 How can we implement the classes? If we just write
 
 ```java
-java
 class MtList<T> implements IList<T> {
   public IList<T> filter(IPred<T> pred) { return this; }
   public IList<T> sort(IComparator<T> comp) { return this; }
@@ -1102,7 +1107,7 @@ public IList<T> filter(IPred<T> pred) {
 
 It is pretty easy to refactor sort now to use the generics form too.
 
-15.6 Generic interfaces with more than one parameter
+### 15.6 Generic interfaces with more than one parameter
 
 Suppose we wanted to produce the list of all Runners’ names. Without generics, we might come up with an interface definition like this:
 
@@ -1165,7 +1170,7 @@ IList<Integer> ints = new ConsList<Integer>(1,
                         new ConsList<Integer>(4, new MtList<Integer>()));
 ```
 
-15.8 Subtleties and challenges with generic types
+### 15.8 Subtleties and challenges with generic types
 
 They also introduced foldr as a way to calculate the result of an operation to the entire list but without being specific.
 
@@ -1223,11 +1228,11 @@ class Utils {
 }
 ```
 
-15.8.4 Digression: Function objects in recent Java
+### 15.8.4 Digression: Function objects in recent Java
 
-These interfaces for `IFunc`, `IFunc2` and `IPred` are so helpful that they are already defined on `java.util.function` package but under another names.
+These interfaces for `IFunc`, `IFunc2` and `IPred` are so helpful that they are already defined on `java.util.function` package but under other names.
 
-15.9 Summary
+### 15.9 Summary
 
 `Predicate`, `IFunc`, `IFunc2` will help you remove a lot of boilerplate designing your code.
 
@@ -1359,17 +1364,17 @@ knuth.book = artOfComputerProgramming;
 
 Syntactically, this is very similar to how we initialize fields in the constructors of objects. But don’t be fooled: assignment statements are very different! Initializing fields lets us “define the field” to be equal to the given value, and in that sense initializations are at least somewhat like mathematical equations that assert two things to be equal. But assignment statements do not assert such an equality — in the assignment statement above, we know that knuth.book is equal to null! Assignments change the meaning of the variable on the left hand side, for the rest of the program...or at least until the next assignment to that same variable changes its meaning again.
 
-17.5 Interlude: local variables
+### 17.5 Interlude: local variables
 
 What are local variables?
 
-17.6 Interlude: Statements versus expressions
+### 17.6 Interlude: Statements versus expressions
 
-17.7 Warning: Side effects may vary
+### 17.7 Warning: Side effects may vary
 
 The net effect of an assignment statement, namely a change to a variable, is known as `mutation`. Since statements on their own do not evaluate to values, the only way we can observe what they’ve done is by their `side effects`. This has some fairly drastic consequences for our programs.
 
-17.7.3 Non-testable code
+### 17.7.3 Non-testable code
 
 Example of mutation creating a code difficult to test because of the side effects.
 
@@ -1390,7 +1395,7 @@ class Counter {
 }
 ```
 
-17.8 Discussion
+### 17.8 Discussion
 
 With all these potential hazards, what are mutation and side effects actually good for? Let’s not forget that it is essential for creating these cyclic data structures, and we’ll see that cyclic data comes up naturally over and over again.
 
@@ -1470,7 +1475,7 @@ Now that they taught us `void` they say there is no need for test functions to r
 
 Sharing objects between multiple data structures, modifying fields of aliased objects, modifying list structures.
 
-19.1 Introduction
+### 19.1 Introduction
 
 Phone books: were used to maintain lists of people and their phone numbers. Often, people maintained several such phone books
 - one for family
@@ -1479,7 +1484,7 @@ Phone books: were used to maintain lists of people and their phone numbers. Ofte
 
 Any given contact might appear in multiple lists.
 
-19.2 Phone lists, take 1
+### 19.2 Phone lists, take 1
 
 ```java
 class Person {
@@ -1543,13 +1548,13 @@ class ExamplePhoneLists {
 }
 ```
 
-19.3 Phone lists, take 2
+### 19.3 Phone lists, take 2
 
-19.4 Aliasing, or, what’s in a name?
+### 19.4 Aliasing, or, what’s in a name?
 
-Aliasing: two different names for the same object. In Java, this is done by assigning one variable to another.
+Aliasing: two different names for the same object. In `Java`, this is done by assigning one variable to another.
 
-19.5 Aliasing, mutation and equality: two notions of equality
+### 19.5 Aliasing, mutation and equality: two notions of equality
 
 - Extensional equality: two items are `extensionally` equal if their fields are the same: either they’re equal primitive values, or they’re objects that are themselves extensionally equal.
 
@@ -1559,7 +1564,7 @@ A helpful mnemonic: extensional equality is when two items have the same extent 
 
 So far, every time we define a sameness method (sameShape, sameList, samePerson, etc.), it has been a test of extensional equality, because we recur down the shape, checking that all fields are the same.
 
-If we truly want to check intensional equality, we can use Java’s == operator
+If we truly want to check intensional equality, we can use `Java`’s == operator
 
 
 They show some other examples of aliasing.
@@ -1572,14 +1577,14 @@ They continue with the phone book example.
 
 Once again, we’ll start with the non-generic ILoPerson type to focus on the essential new aspects of the problem; generalizing to `IList<Person>` is straightforward.
 
-20.1 Removing items from a list: the setup
+### 20.1 Removing items from a list: the setup
 
 They start with the test, basically, following the recipe of side effects methods.
 - Check that list contains the item,
 - Remove it
 - Check that it is not there anymore.
 
-20.2 Removing a person by name, part 1
+### 20.2 Removing a person by name, part 1
 
 Realising we need a helper function like the ones studied on accumulator chapters.
 
@@ -1611,9 +1616,9 @@ void removePerson(String name) {
 }
 ```
 
-20.3 Aliasing, again, and removing items from a list
+### 20.3 Aliasing, again, and removing items from a list
 
-20.5 Revising our data structure: Introducing sentinels
+### 20.5 Revising our data structure: Introducing sentinels
 
 This particular technique of introducing an extra object between what we have (the variable friends) and what we want (the data in the list) is called adding a layer of indirection. In courses on algorithms and data structures, you will see many, many more examples of using indirection to solve problems that seem difficult or impossible, otherwise.
 
@@ -1681,9 +1686,9 @@ So our new, final class design for mutable person lists is:
                 +--------------+
 ```
 
-20.6.1 Implementing the nodes of the list
+### 20.6.1 Implementing the nodes of the list
 
-20.8 Generalizing from MutablePersonLists to mutable lists of arbitrary data
+### 20.8 Generalizing from MutablePersonLists to mutable lists of arbitrary data
 
 ```java
 interface IMutableList<T> {
@@ -1708,9 +1713,9 @@ interface IMutableList<T> {
 
 ## Lecture 21: ArrayLists
 
-Working with Java’s built-in mutable lists
+Working with `Java`’s built-in mutable lists
 
-21.1 Introducing ArrayLists
+### 21.1 Introducing ArrayLists
 
 ```java
 interface IMutableList<T> {
@@ -1733,7 +1738,7 @@ interface IMutableList<T> {
 }
 ```
 
-This interface does not actually exist, instead, Java defines a class for us that provides essentially these (and other) methods anyway: the `ArrayList<T>` class.
+This interface does not actually exist, instead, `Java` defines a class for us that provides essentially these (and other) methods anyway: the `ArrayList<T>` class.
 
 ```java
 import java.util.ArrayList;
@@ -1768,9 +1773,9 @@ class ArrayUtils {
 }
 ```
 
-21.4 Transforming ArrayLists with map: introducing for-each loops
+### 21.4 Transforming ArrayLists with map: introducing for-each loops
 
-21.4.1 Mapping via recursion first
+### 21.4.1 Mapping via recursion first
 
 ```java
 // In ArrayUtils
@@ -1795,7 +1800,7 @@ class ArrayUtils {
 }
 ```
 
-21.4.2 Using for-each loops
+### 21.4.2 Using for-each loops
 
 ```java
 // In ArrayUtils
@@ -1816,7 +1821,7 @@ Implement `foldr` and `foldl` for ArrayLists, first using recursion and then aga
 
 Binary search over sorted ArrayLists, sorting ArrayLists
 
-22.1 Finding an item in an arbitrary ArrayList
+### 22.1 Finding an item in an arbitrary ArrayList
 
 ```java
 // In ArrayUtils
@@ -1857,7 +1862,7 @@ This one in particular:
 }
 ```
 
-22.2 Finding an item in a sorted ArrayList – version 1
+### 22.2 Finding an item in a sorted ArrayList – version 1
 
 Assuming String list for simplicity, so we can relate the sorting to sorting a dictionary.
 
@@ -1888,7 +1893,7 @@ int binarySearchHelp_v1(ArrayList<String> strings, String target, int lowIdx, in
 ```
 
 
-22.3 Finding an item in a sorted ArrayList – version 2
+### 22.3 Finding an item in a sorted ArrayList – version 2
 
 All those adding and subtracting 1s from the indices are tricky to get right, and if we miss even one of them, our code could loop indefinitely. Perhaps there’s a cleaner, less brittle way we could organize our code to avoid these.
 
@@ -1922,7 +1927,7 @@ int binarySearch_v2(ArrayList<String> strings, String target) {
 }
 ```
 
-22.4 Generalizing to arbitrary element types
+### 22.4 Generalizing to arbitrary element types
 
 For completeness, here is the version of binarySearch that works for arbitrary element types. Our signature gets slightly more complicated, but the logic behind the index computations and comparisons remains the same:
 
@@ -1949,11 +1954,11 @@ For completeness, here is the version of binarySearch that works for arbitrary e
 }
 ```
 
-22.5 Sorting an ArrayList
+### 22.5 Sorting an ArrayList
 
 They introduced the `counted-for loop`
 
-Exercise
+#### Exercise
 
 Practice using the counted-for loop: design a method
 
@@ -1979,7 +1984,7 @@ java<T> ArrayList<T> unshuffle(ArrayList<T> arr)
 
 that takes an input ArrayList and produces a new list containing the first, third, fifth ... items of the list, followed by the second, fourth, sixth ... items.
 
-22.6 Finding the minimum value in an ArrayList
+### 22.6 Finding the minimum value in an ArrayList
 
 ```java
 <T> T min(ArrayList<T> arr, IComparator<T> comp) {
@@ -2000,7 +2005,7 @@ that takes an input ArrayList and produces a new list containing the first, thir
 
 Comparing and contrasting for-each loops and counted-for loops; a note about aliasing, parameters, and local variables
 
-23.1 Warmup: build-list
+### 23.1 Warmup: build-list
 
 Suppose we want to implement a method akin to Racket’s build-list function: it should take a number 𝑛 and a function object, and produce an ArrayList that results from invoking that function object on all numbers from 0 to 𝑛−1.
 
@@ -2030,7 +2035,7 @@ Suppose we want to implement a method akin to Racket’s build-list function: it
 
 Why use counted-for loops instead of for-each loops?
 
-23.2 Loops, Aliasing and Variables
+### 23.2 Loops, Aliasing and Variables
 
 First, let’s consider modifying each book in the array-list so that its title is entirely in uppercase letters. We’ll want to use the toUpperCase() method on Strings to accomplish this.
 
@@ -2068,7 +2073,7 @@ void capitalizeTitle() {
 
 The moral of this example is a subtle but important lesson in the differences between `references` and `variables`: when we “pass a variable to a method”, we actually do no such thing at all! Instead, we pass the value of that variable to the method, and that value just might be a reference to an object. If so, inside the method we bind that reference to the parameter of the method, and obtain an alias to the original object, completely independent of the reference that was in the original variable.
 
-23.3 Adding and removing items from lists
+### 23.3 Adding and removing items from lists
 
 Above we claimed that trying to remove an item from an ArrayList and add a new one, while iterating over that list, is a dangerous idea.
 
@@ -2095,7 +2100,7 @@ Because we are counting indices, rather than iterating over the contents of the 
 
 While loops for unbounded iteration
 
-24.1 While loops
+### 24.1 While loops
 
 A while loop simply repeats a block of code for as long as its termination condition remains true:
 
@@ -2138,11 +2143,11 @@ boolean getsToOne(int n) {
 }
 ```
 
-24.1.3 Big-bang
+### 24.1.3 Big-bang
 
 How does the big-bang library work? Conceptually, it takes an initial world and invokes the makeImage method to create an image from it, then invokes the onTick method to get the next work, and then repeats these two steps until the worldEnds method returns true. This sounds like looping behavior, but it cannot possibly be a counted-for loop, since the game can last an indefinite amount of time, and we’re not counting any particular index, but rather updating a world from one value to the next. This is a perfect use of a while loop. In fact, this style of using a while loop to repeatedly handle events (such as keypresses or mouse clicks) is at the core of almost every operating system, browser, game console, or other system that deals with interactivity.
 
-24.2 Discussion
+### 24.2 Discussion
 
 When should we use each of these three loop types? After all, if every for-each loop over ArrayLists can be rewritten to use a counted-for loop, and every counted-for loop can be rewritten to use while loops, why bother with the other two loops?
 
@@ -2154,7 +2159,7 @@ Additionally, as we will see in the next lecture, for-each loops are in fact mor
 
 How does a for-each loop actually work?
 
-We’ve discussed how the three loop forms in Java work to repeatedly execute some computation either:
+We’ve discussed how the three loop forms in `Java` work to repeatedly execute some computation either:
 - once for each item in an ArrayList, 
 - once for every value of an integer variable as it counts
 - or simply indefinitely many times while some condition remains true.
@@ -2175,9 +2180,9 @@ for (T t : tList) {
 }
 ```
 
-25.1.1 Introducing Iterators
+### 25.1.1 Introducing Iterators
 
-The while loop sketch above will work with any object that exposes these two functions as methods. This is a promise to provide a certain set of behaviors, so we should accordingly define a new interface. This interface is called an Iterator, and it is provided for us by Java itself. Its methods are slightly renamed from the sketch above:
+The while loop sketch above will work with any object that exposes these two functions as methods. This is a promise to provide a certain set of behaviors, so we should accordingly define a new interface. This interface is called an Iterator, and it is provided for us by `Java` itself. Its methods are slightly renamed from the sketch above:
 According to our naming conventions, it really ought to be called IIterator, but that’s a clumsy name. At least it does start with a capital I!
 
 
@@ -2207,9 +2212,9 @@ while (listIter.hasNext()) {
 }
 ```
 
-25.1.2 Introducing Iterables
+### 25.1.2 Introducing Iterables
 
-Let’s say that an object is iterable if there exists some Iterator implementation for it. That sounds like another interface, which is also defined for us by Java:
+Let’s say that an object is iterable if there exists some Iterator implementation for it. That sounds like another interface, which is also defined for us by `Java`:
 
 ```java
 // Represents anything that can be iterated over
@@ -2219,7 +2224,7 @@ interface Iterable<T> {
 }
 ```
 
-In the actual Java implementation of `ArrayList`, we see something like this:
+In the actual `Java` implementation of `ArrayList`, we see something like this:
 
 ```java
 class ArrayList<T> implements Iterable<T> {
@@ -2231,9 +2236,9 @@ class ArrayList<T> implements Iterable<T> {
 }
 ```
 
-25.2 Examples of Iterators for different data types
+### 25.2 Examples of Iterators for different data types
 
-25.2.1 Iterators for ArrayLists — counting indices
+### 25.2.1 Iterators for ArrayLists — counting indices
 
 ```java
 class ArrayListIterator<T> implements Iterator<T> {
@@ -2269,7 +2274,7 @@ class ArrayListIterator<T> implements Iterator<T> {
 }
 ```
 
-25.2.2 Iterators for ILists(Self-Referential) — following links
+### 25.2.2 Iterators for ILists(Self-Referential) — following links
 
 ```java
 class IListIterator<T> implements Iterator<T> {
@@ -2329,7 +2334,7 @@ for (T item : myList) {
 }
 ```
 
-25.2.3 Iteration in multiple directions
+### 25.2.3 Iteration in multiple directions
 
 Some data structures can meaningfully support iteration in multiple orders. However, if we choose to make those data structures Iterable, then we have to choose a default iteration order to be used with for-each loops, and construct that particular iterator in the iterator() method. For Deques, we probably would choose the forward iteration direction, as it is the “most natural”. If we want to use the reverse iterator, we’d have to explicitly write the while-loop version ourselves
 
@@ -2344,7 +2349,7 @@ while (revIter.hasNext()) {
 }
 ```
 
-25.2.4 Iterators for Fibonacci numbers — computing items on demand
+### 25.2.4 Iterators for Fibonacci numbers — computing items on demand
 
 Not every iterator needs to store an actual object from which it derives its data. Iterators simply represent sequences of values, and those values might just be computed on demand. Consider the following iterator for calculating Fibonacci numbers:
 
@@ -2369,7 +2374,7 @@ class FibonacciIterator implements Iterator<Integer> {
 
 Other sequences could be prime numbers, or powers of 2, or any other sequence that can be computed on demand.
 
-25.2.5 Higher-order Iterators
+### 25.2.5 Higher-order Iterators
 
 Given an iterator we can create a new iterator that iterates over the results of applying a given function to each item in the original iterator. This is called a higher-order iterator.
 
@@ -2404,7 +2409,7 @@ class EveryOtherIter<T> implements Iterator<T> {
 }
 ```
 
-25.2.6 Iterators over tree-shaped data
+### 25.2.6 Iterators over tree-shaped data
 
 We can even define iterators over tree-shaped data. Let’s consider binary trees. There are many plausible orders for traversing a tree. For the following example tree (with data at the nodes, and nothing at the leaves):
 ```
@@ -2434,9 +2439,9 @@ We can create iterators for each of these orders.
 
 ## Lecture 26: Hashing and Equality
 
-A fast data structure for finding data by a key; the full rules for equality in Java
+A fast data structure for finding data by a key; the full rules for equality in `Java`
 
-26.1.1 Dictionaries
+### 26.1.1 Dictionaries
 
 If we want to represent an English dictionary we might start by:
 
@@ -2449,22 +2454,22 @@ class DictEntry {
 ```
 
 We then need to represent a collection of these entries. We have several choices of data structures to use to represent this collection:
-- IList<DictEntry>, with entries in no particular order
-- IList<DictEntry> that is sorted alphabetically by word
-- Deque<DictEntry>, with entries in no particular order
-- Deque<DictEntry> that is sorted alphabetically by word
-- ArrayList<DictEntry>, with entries in no particular order
-- ArrayList<DictEntry> that is sorted alphabetically by word
-- Binary trees of DictEntry
-- Binary search trees of DictEntry, ordered alphabetically by word
+- `IList`<DictEntry>, with entries in no particular order
+- `IList`<DictEntry> that is sorted alphabetically by word
+- `Deque`<DictEntry>, with entries in no particular order
+- `Deque`<DictEntry> that is sorted alphabetically by word
+- `ArrayList`<DictEntry>, with entries in no particular order
+- `ArrayList`<DictEntry> that is sorted alphabetically by word
+- `Binary trees` of DictEntry
+- `Binary search trees` of DictEntry, ordered alphabetically by word
 
 Let’s consider what operations we’ll typically perform on such a dictionary. The single most important operation on a dictionary of words is to lookup a word to find its definition, so ideally we want that operation to be as fast as possible.
 
-Right away, we can see that the unsorted IList, Deque, ArrayList and binary tree options are woefully outmatched by their sorted versions: at the cost of maintaining the sort order, we get far better algorithms to access the items.
+Right away, we can see that the unsorted `IList`, `Deque`, `ArrayList` and binary tree options are woefully outmatched by their sorted versions: at the cost of maintaining the sort order, we get far better algorithms to access the items.
 
-Some slightly more careful thought shows that both ILists and Deques are less effective than ArrayLists, since we can (as we saw in Lecture 22) use binary search over indices to quickly narrow in on a word, rather than plod our way through the list from front to back.
+Some slightly more careful thought shows that both `ILists` and `Deques` are less effective than `ArrayLists`, since we can (as we saw in Lecture 22) use binary search over indices to quickly narrow in on a word, rather than plod our way through the list from front to back.
 
-26.1.2 Wikis
+### 26.1.2 Wikis
 
 A wiki is like a dictionary that anyone can edit. Here, instead of words and meanings, we would have
 
@@ -2480,23 +2485,23 @@ Here the performance tradeoffs are a bit less clear: we need the ability to quic
 
 With this in mind, our best contenders above (the sorted ArrayList and the binary search trees) are looking less ideal. Further, because we are now worried about creating and deleting entries, we have to worry about the cost of maintaining the sort order.
 
-26.2 Introducing Hash-tables
+### 26.2 Introducing Hash-tables
 
 A hash-table is a data structure that allows us to quickly find data by a key. It is a very fast data structure, and it is the basis of many other data structures.
 
 Similar implementation to ArrayList but with a key instead of an index. The key is generated by a summarized function called a hash function.
 
-26.3 Introducing HashMaps
+### 26.3 Introducing HashMaps
 
-This data structure is so widely used that, like ArrayLists, Java provides an implementation for us. It’s called a HashMap<K, V>, and it’s a generic data type that is parameterized by the type K of keys and the type V of values.
+This data structure is so widely used that, like `ArrayLists`, `Java` provides an implementation for us. It’s called a `HashMap`<K, V>, and it’s a generic data type that is parameterized by the type K of keys and the type V of values.
 
 ```java
 import java.util.HashMap;
 ```
 
-In Java, every class implicitly extends a common base class called Object. (If we define a class that explicitly extends another class, then that base class eventually extends Object.) 
+In `Java`, every class implicitly extends a common base class called `Object`. (If we define a class that explicitly extends another class, then that base class eventually extends Object.) 
 
-Because of this, every object type inherits a method called hashCode, which simply returns an integer. (This is also why every class has a toString method, and various other methods we haven’t needed to examine in this course.) Java even provides a default implementation of this method for us. A hash code is simply a summarization of a piece of data as a number, and the hashCode method is a hash function that computes this hash code for us.
+Because of this, every object type inherits a method called `hashCode`, which simply returns an integer. (This is also why every class has a toString method, and various other methods we haven’t needed to examine in this course.) `Java` even provides a default implementation of this method for us. A hash code is simply a summarization of a piece of data as a number, and the `hashCode` method is a hash function that computes this hash code for us.
 
 ```java
 class ExampleHashMaps {
@@ -2519,11 +2524,11 @@ class ExampleHashMaps {
 }
 ```
 
-26.4 Hash collisions
+### 26.4 Hash collisions
 
 The hash function is a summarization of the data, and it is possible for two different pieces of data to have the same hash code. This is called a hash collision. When this happens, the HashMap will store the data in a linked list at that location. This is why we need to override the equals method in our data types.
 
-26.5 Hash codes and equality
+### 26.5 Hash codes and equality
 
 Collision: two different pieces of data have the same hash code
 
@@ -2534,7 +2539,7 @@ Ways to avoid collisions:
 - chaining, and replaces our ArrayList of values with an ArrayList of ArrayLists of values. Each inner list, or bucket, can hold all the values it needs to. Of course, this eventually defeats the purpose of having a hash table in the first place: we have to scan that inner list)
 - rehashing(essentially uses that inner ArrayList as another hash table, using a different hash function so that the inner table doesn’t immediately fill with collisions)
 
-26.5.1 Defining custom hashCodes
+### 26.5.1 Defining custom hashCodes
 
 ```java
 class Book {
@@ -2555,9 +2560,9 @@ class Author {
 }
 ```
 
-26.5.2 Defining custom equals methods for simple classes
+### 26.5.2 Defining custom equals methods for simple classes
 
-The equals method is ultimately inherited from the Object class. Accordingly, the signature for equals must work for any object at all (unlike our sameBook or sameShape methods), so it looks like
+The equals method is ultimately inherited from the `Object` class. Accordingly, the signature for equals must work for any object at all (unlike our sameBook or sameShape methods), so it looks like
 
 ```java
 public boolean equals(Object other);
@@ -2597,9 +2602,9 @@ class Author {
 }
 ```
 
-6.5.3 Defining custom equals methods for itemizations(when inheritance is involved)
+### 26.5.3 Defining custom equals methods for itemizations(when inheritance is involved)
 
-We want to define customized equality testing for itemizations, we obviously can’t throw away the hard-won correct behavior of our sameness-testing methods from Lecture 12.
+We want to define customized equality testing for itemizations, we obviously can’t throw away the hard-won correct behavior of our sameness-testing methods from `Lecture 12`.
 
 The solution in this case is a “hybrid” of the code above and the double-dispatch technique of Lecture 12.
 
